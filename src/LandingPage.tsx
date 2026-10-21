@@ -361,27 +361,18 @@ export default function LandingPage() {
                       </div>
                     </button>
 
-                    {/* Desplegable al tocar: Muestra el botón de WhatsApp "Pedir Turno" */}
+                    {/* Desplegable al tocar: Botón compacto "Pedir Turno" reducido un 50% */}
                     {isExpanded && (
-                      <div className="bg-slate-50 border-t border-[#d3d3d3]/70 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div>
-                          <p className="text-xs sm:text-sm text-[#36454f] font-medium">
-                            Atención en consultorio con turno previo para <strong>{prof.name}</strong> ({prof.specialty}).
-                          </p>
-                          <p className="text-[11px] font-mono text-[#808080] mt-0.5">
-                            Belgrano 3108, Santa Fe · Nuevo Plaza Consultorios
-                          </p>
-                        </div>
-
+                      <div className="bg-slate-50/80 border-t border-[#d3d3d3]/60 px-4 sm:px-6 py-2.5 flex items-center">
                         <a
                           href={getWaLinkForDoctor(prof.name, prof.specialty)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-lg bg-[#000000] hover:bg-[#36454f] text-white font-bold text-xs sm:text-sm tracking-wide transition-all shadow-sm shrink-0"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#000000] hover:bg-[#36454f] text-white font-bold text-xs tracking-wide transition-all shadow-xs"
                         >
-                          <MessageCircle className="w-4 h-4 text-[#d3d3d3]" />
+                          <MessageCircle className="w-3.5 h-3.5 text-[#d3d3d3]" />
                           <span>Pedir Turno</span>
-                          <ArrowRight className="w-3.5 h-3.5 text-[#d3d3d3]" />
+                          <ArrowRight className="w-3 h-3 text-[#d3d3d3]" />
                         </a>
                       </div>
                     )}
