@@ -280,13 +280,13 @@ export default function LandingPage() {
           </div>
 
           {/* Buscador minimalista de precisión */}
-          <div className="w-full md:w-80 relative shrink-0">
+          <div className="w-full md:w-96 relative shrink-0">
             <Search className="w-4 h-4 text-[#808080] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Buscar médico o especialidad..."
+              placeholder="Escribe el nombre del médico o especialidad..."
               className="w-full pl-10 pr-10 py-3 rounded-lg border border-[#d3d3d3] bg-white text-sm text-[#000000] placeholder-[#808080] focus:outline-none focus:border-[#000000] transition-colors"
             />
             {searchTerm && (
