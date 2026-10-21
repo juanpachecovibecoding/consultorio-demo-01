@@ -4,8 +4,6 @@ import {
   MapPin, 
   Clock, 
   Phone, 
-  Sparkles, 
-  CheckCircle2, 
   ArrowRight,
   Stethoscope,
   Search,
@@ -15,8 +13,8 @@ import {
   Activity,
   Users,
   ExternalLink,
-  Building2,
-  ShieldCheck
+  ShieldCheck,
+  Check
 } from 'lucide-react';
 
 interface Professional {
@@ -62,7 +60,7 @@ const CATEGORIES = [
   { id: 'all',           label: 'Todos',            icon: Stethoscope },
   { id: 'clinica',       label: 'Clínica & Interna', icon: HeartPulse  },
   { id: 'mental',        label: 'Salud Mental',      icon: Brain       },
-  { id: 'mujer-piel',    label: 'Mujer & Piel',      icon: Sparkles    },
+  { id: 'mujer-piel',    label: 'Mujer & Piel',      icon: Activity    },
   { id: 'nutricion',     label: 'Nutrición',          icon: Activity    },
   { id: 'especialidades',label: 'Especialidades',    icon: ShieldCheck },
   { id: 'laboratorio',   label: 'Laboratorio',       icon: FlaskConical},
@@ -129,154 +127,142 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#ffffff] text-[#000000] font-sans selection:bg-[#36454f] selection:text-white">
 
-      {/* ── 1. TOP BAR INSTITUCIONAL (Paleta: #000000 fondo, #d3d3d3 texto, #ffffff hover) ── */}
-      <div className="bg-[#000000] text-[#d3d3d3] text-xs py-2.5 px-4 sm:px-8 border-b border-[#36454f]">
+      {/* ── 1. TOP BAR INSTITUCIONAL (Hairline border & Pure Black) ── */}
+      <div className="bg-[#000000] text-[#d3d3d3] text-[11px] tracking-wide py-2.5 px-4 sm:px-10 border-b border-[#36454f]/60">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center sm:justify-start">
-            <span className="flex items-center gap-1.5 text-[#d3d3d3]">
-              <MapPin className="w-3.5 h-3.5 text-[#808080] shrink-0" />
+          <div className="flex items-center gap-6 flex-wrap justify-center sm:justify-start">
+            <span className="flex items-center gap-2 text-[#d3d3d3]">
+              <MapPin className="w-3 h-3 text-[#808080] shrink-0" />
               {clinic.address}, {clinic.city}
             </span>
-            <span className="hidden md:flex items-center gap-1.5 text-[#808080]">
-              <Clock className="w-3.5 h-3.5 text-[#808080] shrink-0" />
+            <span className="hidden md:flex items-center gap-2 text-[#808080]">
+              <Clock className="w-3 h-3 text-[#808080] shrink-0" />
               {clinic.workingHours}
             </span>
           </div>
-          <div className="flex items-center gap-4 font-medium text-[#d3d3d3]">
-            <a href={`tel:${clinic.phone}`} className="flex items-center gap-1.5 hover:text-white transition">
-              <Phone className="w-3.5 h-3.5 text-[#808080]" />
-              <span>Tel: <strong className="text-white">{clinic.phone}</strong></span>
+          <div className="flex items-center gap-6 font-medium text-[#d3d3d3]">
+            <a href={`tel:${clinic.phone}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Phone className="w-3 h-3 text-[#808080]" />
+              <span>Tel: <strong className="text-white font-mono">{clinic.phone}</strong></span>
             </a>
-            <span className="text-[#36454f]">|</span>
+            <span className="text-[#36454f]">/</span>
             <a
               href={heroWaUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-white hover:text-[#d3d3d3] transition font-bold"
+              className="flex items-center gap-1.5 text-white hover:text-[#d3d3d3] transition-colors"
             >
-              <MessageCircle className="w-3.5 h-3.5 text-[#d3d3d3]" />
-              <span>WhatsApp: <strong>342 5162484</strong></span>
+              <MessageCircle className="w-3 h-3 text-[#d3d3d3]" />
+              <span>WhatsApp: <strong className="font-mono">342 5162484</strong></span>
             </a>
           </div>
         </div>
       </div>
 
-      {/* ── 2. HEADER STICKY (Paleta: #ffffff fondo, #000000 logo, #36454f botón, #d3d3d3 bordes) ── */}
-      <header className="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-[#d3d3d3] shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex justify-between items-center">
+      {/* ── 2. HEADER SUISSE BOUTIQUE (Hairline border, minimalismo tipográfico) ── */}
+      <header className="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-[#d3d3d3] transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-10 py-4 flex justify-between items-center">
 
           {/* Logotipo fiel a la placa original */}
           <a href="#" className="flex flex-col group shrink-0 py-0.5">
             <div className="font-logo-nuevo text-3xl sm:text-4xl text-[#000000] group-hover:text-[#36454f] transition-colors leading-none tracking-normal">
               Nuevo Plaza
             </div>
-            <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1"></div>
-            <span className="font-logo-sub text-[10px] sm:text-[11px] tracking-[0.28em] font-semibold text-[#36454f] uppercase text-center pl-[0.28em]">
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1"></div>
+            <span className="font-logo-sub text-[9.5px] sm:text-[10.5px] tracking-[0.3em] font-semibold text-[#36454f] uppercase text-center pl-[0.3em]">
               CONSULTORIOS
             </span>
-            <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent mt-0.5"></div>
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent mt-0.5"></div>
           </a>
 
-          {/* Navegación Desktop */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-[#36454f]">
-            <a href="#profesionales" className="hover:text-[#000000] transition">Cuerpo Médico</a>
-            <a href="#laboratorio"   className="hover:text-[#000000] transition">Laboratorio</a>
-            <a href="#coberturas"    className="hover:text-[#000000] transition">Coberturas</a>
-            <a href="#ubicacion"     className="hover:text-[#000000] transition">Ubicación</a>
+          {/* Navegación Desktop - Estilo Editorial Suizo */}
+          <nav className="hidden lg:flex items-center gap-8 text-[13px] font-medium tracking-wide text-[#36454f]">
+            <a href="#profesionales" className="hover:text-[#000000] transition-colors py-1">Cuerpo Médico</a>
+            <a href="#laboratorio"   className="hover:text-[#000000] transition-colors py-1">Laboratorio</a>
+            <a href="#coberturas"    className="hover:text-[#000000] transition-colors py-1">Coberturas</a>
+            <a href="#ubicacion"     className="hover:text-[#000000] transition-colors py-1">Ubicación</a>
           </nav>
 
-          {/* CTA header minimalista en Charcoal */}
+          {/* CTA con Inversión Suiza: borde #36454f, hover se invierte a sólido negro */}
           <a
             href={heroWaUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-[#36454f] hover:bg-[#000000] text-white font-bold text-xs sm:text-sm shadow-sm transition-all hover:scale-[1.02] active:scale-95 shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[#36454f] bg-transparent text-[#000000] hover:bg-[#000000] hover:text-white font-semibold text-xs tracking-wide transition-all duration-200 shrink-0"
           >
-            <MessageCircle className="w-4 h-4 text-[#d3d3d3]" />
+            <MessageCircle className="w-3.5 h-3.5" />
             <span>Solicitar Turno</span>
           </a>
 
         </div>
       </header>
 
-      {/* ── 3. HERO (Paleta: Charcoal #36454f a #000000, texto blanco y #d3d3d3, botón #ffffff con texto #000000) ── */}
-      <section className="relative overflow-hidden border-b border-[#36454f]">
+      {/* ── 3. HERO (Estilo Clínica Boutique Suiza: Gran respiración, sobriedad y arquitectura) ── */}
+      <section className="relative overflow-hidden bg-[#000000] text-white border-b border-[#36454f]">
 
-        {clinic.heroImageUrl ? (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${clinic.heroImageUrl})` }}
-          >
-            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-[1px]"></div>
-          </div>
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#36454f] via-[#232d34] to-[#000000]">
-            {/* Patrón de puntos minimalista */}
-            <div
-              className="absolute inset-0 opacity-[0.06]"
-              style={{
-                backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
-                backgroundSize: '28px 28px',
-              }}
-            />
-            {/* Brillo suave de luz difusa neutra */}
-            <div className="absolute top-0 right-0 w-96 h-96 -mr-20 -mt-20 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-slate-400/5 blur-3xl pointer-events-none"></div>
-          </div>
-        )}
+        {/* Patrón de grilla milimétrica casi invisible (Swiss Architectural Grid) */}
+        <div 
+          className="absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
+          }}
+        />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-24">
-          <div className="max-w-2xl">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-10 py-20 sm:py-28">
+          <div className="max-w-3xl">
 
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#d3d3d3] text-xs font-bold uppercase tracking-wider mb-5 backdrop-blur-sm">
-              <Building2 className="w-3.5 h-3.5 text-white" />
-              Centro Médico Multidisciplinario • Santa Fe
+            {/* Micro-etiqueta arquitectónica */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-[#36454f] bg-[#36454f]/30 text-[#d3d3d3] text-[10.5px] font-mono tracking-widest uppercase mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
+              CENTRO MÉDICO MULTIDISCIPLINARIO · SANTA FE
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.15]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.12]">
               Salud integral con especialistas de confianza en un solo lugar.
             </h1>
 
-            <p className="text-sm sm:text-lg text-[#d3d3d3] mt-5 leading-relaxed font-normal">
-              En <strong className="text-white">Nuevo Plaza Consultorios</strong> reunimos más de
-              18 profesionales de la salud en 13 especialidades médicas, con laboratorio de análisis
-              clínicos propio, para cuidar a toda tu familia.
+            <p className="text-sm sm:text-lg text-[#d3d3d3] mt-6 leading-relaxed font-normal max-w-2xl">
+              En <strong className="text-white font-semibold">Nuevo Plaza Consultorios</strong> reunimos más de
+              18 profesionales de la salud en 13 especialidades médicas, junto a servicio de laboratorio de análisis
+              clínicos propio, en el corazón de Santa Fe.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mt-8">
+            {/* Acciones principales - Botones con inversión de color */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-10">
               <a
                 href={heroWaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-[#ffffff] hover:bg-[#d3d3d3] text-[#000000] font-black text-sm sm:text-base shadow-lg transition-all hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-lg bg-white text-[#000000] hover:bg-[#d3d3d3] font-bold text-sm tracking-wide transition-all duration-200"
               >
-                <MessageCircle className="w-5 h-5 text-[#36454f]" />
+                <MessageCircle className="w-4 h-4 text-[#36454f]" />
                 <span>Consultar Turno por WhatsApp</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <a
                 href="#profesionales"
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm sm:text-base border border-white/20 backdrop-blur-sm transition"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-lg border border-[#808080]/40 text-white hover:bg-white/10 font-medium text-sm tracking-wide transition-all duration-200"
               >
-                <Search className="w-4 h-4 text-[#d3d3d3]" />
+                <Search className="w-3.5 h-3.5 text-[#d3d3d3]" />
                 <span>Ver Cuerpo Médico</span>
               </a>
             </div>
 
-            {/* Stats Minimalistas */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-8 mt-10 pt-8 border-t border-white/15">
-              <div>
-                <p className="text-2xl sm:text-3xl font-black text-white">13+</p>
-                <p className="text-xs font-semibold text-[#d3d3d3] mt-0.5">Especialidades</p>
+            {/* Estadísticas de precisión suiza: separadas por finas líneas verticales */}
+            <div className="grid grid-cols-3 gap-6 sm:gap-10 mt-14 pt-10 border-t border-[#36454f]/80 max-w-xl">
+              <div className="border-l border-[#36454f] pl-4 sm:pl-6">
+                <p className="text-2xl sm:text-4xl font-mono font-bold text-white tracking-tight">13+</p>
+                <p className="text-[11px] font-mono tracking-widest text-[#808080] uppercase mt-1">Especialidades</p>
               </div>
-              <div>
-                <p className="text-2xl sm:text-3xl font-black text-white">18+</p>
-                <p className="text-xs font-semibold text-[#d3d3d3] mt-0.5">Profesionales</p>
+              <div className="border-l border-[#36454f] pl-4 sm:pl-6">
+                <p className="text-2xl sm:text-4xl font-mono font-bold text-white tracking-tight">18+</p>
+                <p className="text-[11px] font-mono tracking-widest text-[#808080] uppercase mt-1">Profesionales</p>
               </div>
-              <div>
-                <p className="text-2xl sm:text-3xl font-black text-white">Propio</p>
-                <p className="text-xs font-semibold text-[#d3d3d3] mt-0.5">Laboratorio</p>
+              <div className="border-l border-[#36454f] pl-4 sm:pl-6">
+                <p className="text-2xl sm:text-4xl font-mono font-bold text-white tracking-tight">LAB</p>
+                <p className="text-[11px] font-mono tracking-widest text-[#808080] uppercase mt-1">Análisis Propio</p>
               </div>
             </div>
 
@@ -284,36 +270,36 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── 4. DIRECTORIO DE PROFESIONALES (Paleta: #ffffff, #000000, #36454f, #808080, #d3d3d3) ── */}
-      <section id="profesionales" className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-8">
+      {/* ── 4. DIRECTORIO DE PROFESIONALES (Swiss Medical Directory) ── */}
+      <section id="profesionales" className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-10">
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-6 border-b border-[#d3d3d3]">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#36454f] bg-slate-100 px-3 py-1 rounded-full mb-3 border border-[#d3d3d3]">
-              <Users className="w-3.5 h-3.5 text-[#36454f]" /> Cuerpo Médico
+            <div className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#808080] mb-2">
+              01 / CUERPO MÉDICO
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-[#000000] tracking-tight">
               Especialistas y Profesionales
             </h2>
-            <p className="text-sm text-[#808080] mt-1.5 max-w-xl">
+            <p className="text-sm text-[#808080] mt-1 max-w-xl font-normal">
               Buscá por nombre o especialidad y solicitá tu turno directo por WhatsApp.
             </p>
           </div>
 
-          {/* Buscador minimalista */}
-          <div className="w-full md:w-72 relative shrink-0">
+          {/* Buscador minimalista de precisión */}
+          <div className="w-full md:w-80 relative shrink-0">
             <Search className="w-4 h-4 text-[#808080] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Buscar médico o especialidad..."
-              className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#d3d3d3] bg-white text-sm text-[#000000] focus:outline-none focus:ring-2 focus:ring-[#36454f] shadow-2xs"
+              className="w-full pl-10 pr-10 py-3 rounded-lg border border-[#d3d3d3] bg-white text-sm text-[#000000] placeholder-[#808080] focus:outline-none focus:border-[#000000] transition-colors"
             />
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#808080] hover:text-[#000000] font-bold"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#808080] hover:text-[#000000] font-mono"
               >
                 ✕
               </button>
@@ -321,74 +307,73 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Filtros de categoría — estilo minimalista */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none">
+        {/* Filtros de categoría — Botones rectangulares suizos */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
           {CATEGORIES.map(cat => {
-            const Icon = cat.icon;
             const isActive = selectedCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition border ${
+                className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide shrink-0 transition-all border ${
                   isActive
-                    ? 'bg-[#000000] text-white border-[#000000] shadow-xs'
-                    : 'bg-white text-[#36454f] border-[#d3d3d3] hover:bg-slate-50 hover:border-[#808080]'
+                    ? 'bg-[#000000] text-white border-[#000000]'
+                    : 'bg-white text-[#36454f] border-[#d3d3d3] hover:border-[#000000] hover:text-[#000000]'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#808080]'}`} />
                 {cat.label}
               </button>
             );
           })}
         </div>
 
-        {/* Contador */}
-        <p className="text-xs text-[#808080] font-medium mb-5">
-          {filteredProfessionals.length} profesional{filteredProfessionals.length !== 1 ? 'es' : ''} encontrado{filteredProfessionals.length !== 1 ? 's' : ''}
-          {searchTerm && <span className="ml-1 text-[#36454f]">para "{searchTerm}"</span>}
-        </p>
+        {/* Contador tipo ficha */}
+        <div className="flex items-center justify-between text-xs font-mono text-[#808080] mb-6">
+          <span>{filteredProfessionals.length} PROFESIONALES REGISTRADOS</span>
+          {searchTerm && <span>FILTRANDO: "{searchTerm.toUpperCase()}"</span>}
+        </div>
 
-        {/* Grid de tarjetas — diseño minimalista monocromático */}
+        {/* Grid de tarjetas estilo Clínica Boutique Suiza (Hairline borders, tipografía rotunda, inversión) */}
         {filteredProfessionals.length === 0 ? (
-          <div className="bg-white rounded-3xl p-12 text-center border border-[#d3d3d3] max-w-md mx-auto">
-            <Search className="w-10 h-10 text-[#808080] mx-auto mb-3" />
+          <div className="bg-slate-50 rounded-xl p-14 text-center border border-[#d3d3d3] max-w-md mx-auto">
+            <Search className="w-8 h-8 text-[#808080] mx-auto mb-3" />
             <h3 className="text-base font-bold text-[#000000]">Sin resultados</h3>
-            <p className="text-xs text-[#808080] mt-1">Intentá con otra palabra clave.</p>
+            <p className="text-xs text-[#808080] mt-1">Intentá con otra palabra clave o especialidad.</p>
             <button
               onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}
-              className="mt-4 px-4 py-2 rounded-xl bg-[#000000] text-white text-xs font-bold hover:bg-[#36454f] transition"
+              className="mt-5 px-5 py-2.5 rounded-lg bg-[#000000] text-white text-xs font-semibold hover:bg-[#36454f] transition-colors"
             >
-              Ver todos
+              Ver todos los profesionales
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredProfessionals.map((prof, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl border border-[#d3d3d3] p-5 shadow-2xs hover:shadow-md hover:border-[#36454f] transition-all flex flex-col justify-between group"
+                className="bg-white rounded-xl border border-[#d3d3d3] p-6 transition-all duration-200 hover:border-[#000000] hover:shadow-xs flex flex-col justify-between group"
               >
                 <div>
-                  {/* Badge de especialidad monocromático sobrio */}
-                  <span className="inline-block px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide bg-slate-100 text-[#36454f] border border-[#d3d3d3] mb-3">
+                  {/* Micro-etiqueta de especialidad */}
+                  <div className="text-[10px] font-mono tracking-[0.2em] font-bold uppercase text-[#808080] mb-2.5">
                     {prof.specialty}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-black text-[#000000] group-hover:text-[#36454f] transition leading-snug">
+                  </div>
+                  <h3 className="text-lg font-bold text-[#000000] group-hover:text-[#36454f] transition-colors leading-snug">
                     {prof.name}
                   </h3>
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-[#808080] font-medium">Atención con turno</span>
+                <div className="mt-6 pt-5 border-t border-[#d3d3d3]/70 flex items-center justify-between">
+                  <span className="text-[11px] font-mono text-[#808080]">CONSULTA CON TURNO</span>
+                  {/* Botón con efecto de inversión suiza */}
                   <a
                     href={getWaLinkForDoctor(prof.name, prof.specialty)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#36454f] bg-slate-100 hover:bg-[#36454f] hover:text-white px-3.5 py-2 rounded-xl transition border border-[#d3d3d3] hover:border-[#36454f]"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg border border-[#36454f] text-[#36454f] bg-transparent hover:bg-[#000000] hover:text-white hover:border-[#000000] transition-all duration-200"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
-                    Pedir Turno
+                    <span>Pedir Turno</span>
                   </a>
                 </div>
               </div>
@@ -398,80 +383,73 @@ export default function LandingPage() {
 
       </section>
 
-      {/* ── 5. LABORATORIO (Paleta: #36454f a #000000, texto blanco y #d3d3d3) ── */}
-      <section id="laboratorio" className="py-16 bg-[#36454f] text-white relative overflow-hidden border-t border-b border-[#000000]">
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-          }}
-        />
+      {/* ── 5. LABORATORIO (Arquitectura de Alta Precisión en Charcoal #36454F) ── */}
+      <section id="laboratorio" className="py-20 sm:py-28 bg-[#36454f] text-white relative overflow-hidden border-t border-[#000000]">
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-10 relative z-10">
+          
+          <div className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#d3d3d3] mb-3">
+            02 / SERVICIO BIOQUÍMICO
+          </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#d3d3d3] text-xs font-bold uppercase tracking-wider mb-4 border border-white/15">
-                <FlaskConical className="w-3.5 h-3.5 text-white" />
-                Servicio Bioquímico Integrado
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
                 Laboratorio de Análisis Clínicos
               </h2>
-              <p className="text-[#d3d3d3] text-sm sm:text-base mt-4 leading-relaxed">
-                Contamos con laboratorio bioquímico propio dentro de las instalaciones. Realizamos
-                extracciones y estudios de rutina y especializados, con resultados ágiles y confiables
-                para mayor comodidad de nuestros pacientes.
+              <p className="text-[#d3d3d3] text-sm sm:text-base mt-5 leading-relaxed font-normal">
+                Servicio bioquímico integrado en nuestras instalaciones. Realizamos extracciones 
+                y estudios de rutina y alta complejidad, con procesamiento ágil y entrega confiable de resultados.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                 {[
-                  { title: 'Análisis de Rutina & Chequeos', desc: 'Hemogramas, glucemia, lipidograma, orina completa y perfiles hormonales.' },
-                  { title: 'Atención a Obras Sociales', desc: 'Aceptamos principales obras sociales, prepagas y consulta particular.' },
+                  { title: 'Análisis de Rutina & Chequeos', desc: 'Hemogramas, glucemia, perfiles lipídicos, función renal, hepatogramas y hormonales.' },
+                  { title: 'Atención a Obras Sociales', desc: 'Coberturas médicas con orden digital o impresa y atención particular.' },
                 ].map((item, i) => (
-                  <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-3.5 flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold text-white">{item.title}</h4>
-                      <p className="text-[11px] text-[#d3d3d3] mt-0.5 leading-snug">{item.desc}</p>
-                    </div>
+                  <div key={i} className="bg-black/20 border border-white/10 rounded-lg p-5">
+                    <h4 className="text-xs font-bold text-white tracking-wide uppercase font-mono">{item.title}</h4>
+                    <p className="text-xs text-[#d3d3d3] mt-2 leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-4 items-center">
+              <div className="mt-9 flex flex-wrap gap-4 items-center">
                 <a
                   href={labWaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#ffffff] hover:bg-[#d3d3d3] text-[#000000] font-black text-sm transition shadow-md"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-lg bg-white text-[#000000] hover:bg-[#d3d3d3] font-bold text-xs tracking-wide transition-all"
                 >
                   <MessageCircle className="w-4 h-4 text-[#36454f]" />
-                  Consultar por Análisis Clínicos
+                  <span>Consultar por Análisis Clínicos</span>
                 </a>
-                <span className="text-xs text-[#d3d3d3]">Extracciones por orden médica y turnos programados.</span>
+                <span className="text-xs text-[#d3d3d3] font-mono">Turnos programados y orden médica</span>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-black/25 border border-white/10 rounded-3xl p-6 sm:p-8">
-              <h3 className="text-base font-bold text-white mb-5 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#d3d3d3]" /> Horarios de Laboratorio
+            {/* Ficha técnica de horarios */}
+            <div className="lg:col-span-5 bg-[#000000]/40 border border-white/15 rounded-xl p-8">
+              <h3 className="text-xs font-mono tracking-widest text-[#d3d3d3] uppercase mb-6 flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-white" />
+                CRONOGRAMA DE LABORATORIO
               </h3>
-              <ul className="space-y-3.5 text-xs">
+              <ul className="space-y-4 text-xs font-mono">
                 {[
-                  { label: 'Extracciones de sangre', value: 'Lunes a Viernes 07:30 a 10:30 hs' },
-                  { label: 'Entrega de resultados', value: 'Digital / Presencial' },
-                  { label: 'Consultas bioquímicas', value: 'Vía WhatsApp', highlight: true },
+                  { label: 'Extracciones', value: 'Lunes a Viernes 07:30 a 10:30 hs' },
+                  { label: 'Entrega de resultados', value: 'Formato Digital / Presencial' },
+                  { label: 'Consultas bioquímicas', value: 'Canal WhatsApp', highlight: true },
                 ].map((row, i) => (
-                  <li key={i} className={`flex justify-between gap-4 ${i < 2 ? 'border-b border-white/10 pb-3.5' : ''}`}>
-                    <span className="text-[#d3d3d3]">{row.label}:</span>
-                    <span className={`font-bold text-right ${row.highlight ? 'text-white underline decoration-[#808080]' : 'text-white'}`}>{row.value}</span>
+                  <li key={i} className={`flex justify-between items-baseline gap-4 ${i < 2 ? 'border-b border-white/10 pb-4' : ''}`}>
+                    <span className="text-[#808080] uppercase text-[11px]">{row.label}</span>
+                    <span className={`font-bold text-right ${row.highlight ? 'text-white' : 'text-[#d3d3d3]'}`}>{row.value}</span>
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 p-3.5 rounded-xl bg-white/5 border border-white/10 text-[#d3d3d3] text-xs leading-relaxed">
-                💡 <strong>Importante:</strong> Consultá previamente los requisitos de ayuno o preparación previa según el estudio solicitado por tu médico.
+              <div className="mt-8 p-4 rounded-lg bg-white/5 border border-white/10 text-xs text-[#d3d3d3] leading-relaxed">
+                <p className="font-semibold text-white mb-1">Indicaciones previas:</p>
+                Consultá con anticipación las horas de ayuno o preparación requerida según tu prescripción médica.
               </div>
             </div>
 
@@ -479,21 +457,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── 6. COBERTURAS (Paleta: #ffffff fondo, #36454f badges y textos, #d3d3d3 bordes) ── */}
-      <section id="coberturas" className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-xs font-bold text-[#36454f] bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider border border-[#d3d3d3]">
-            Coberturas & Prepagas
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#000000] mt-3">
-            Atendemos las principales obras sociales y prepagas
+      {/* ── 6. COBERTURAS (Lista en Grilla de Precisión Suiza) ── */}
+      <section id="coberturas" className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-10">
+        
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#808080] mb-2">
+            03 / CONVENIOS & COBERTURAS
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-black text-[#000000] tracking-tight">
+            Obras Sociales y Prepagas
           </h2>
-          <p className="text-sm text-[#808080] mt-2">
-            Consultá por tu cobertura particular antes de reservar tu turno.
+          <p className="text-sm text-[#808080] mt-2 font-normal">
+            Trabajamos con las principales prestadoras del sistema de salud y consultas particulares.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
           {[
             'OSDE', 'Swiss Medical', 'Galeno', 'PAMI',
             'Federada Salud', 'IOSPER', 'IOMA', 'Medifé',
@@ -501,73 +480,77 @@ export default function LandingPage() {
           ].map(obra => (
             <div
               key={obra}
-              className="flex items-center gap-2.5 bg-white border border-[#d3d3d3] rounded-xl px-4 py-3 text-xs font-semibold text-[#36454f] shadow-2xs hover:border-[#36454f] hover:bg-slate-50 transition"
+              className="flex items-center gap-3 bg-white border border-[#d3d3d3] rounded-lg px-4 py-3.5 text-xs font-semibold text-[#000000] hover:border-[#000000] transition-colors"
             >
-              <CheckCircle2 className="w-4 h-4 text-[#36454f] shrink-0" />
-              {obra}
+              <Check className="w-3.5 h-3.5 text-[#36454f] shrink-0" />
+              <span>{obra}</span>
             </div>
           ))}
         </div>
 
-        <p className="text-center text-xs text-[#808080] mt-6">
-          ¿No encontrás tu cobertura? <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="text-[#000000] font-bold hover:underline">Consultanos directamente por WhatsApp.</a>
+        <p className="text-center text-xs text-[#808080] mt-8">
+          ¿Tu cobertura no figura en la lista?{' '}
+          <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="text-[#000000] font-bold underline decoration-[#808080] hover:decoration-[#000000] transition">
+            Consultanos directamente por WhatsApp.
+          </a>
         </p>
       </section>
 
-      {/* ── 7. UBICACIÓN & MAPA (Paleta: #ffffff fondo, #36454f íconos y textos, #d3d3d3 bordes) ── */}
-      <section id="ubicacion" className="py-16 bg-slate-50/60 border-t border-[#d3d3d3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* ── 7. UBICACIÓN & CONTACTO (Líneas Arquitectónicas) ── */}
+      <section id="ubicacion" className="py-20 sm:py-28 bg-slate-50/70 border-t border-[#d3d3d3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-10">
+          
+          <div className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#808080] mb-2">
+            04 / LOCALIZACIÓN
+          </div>
 
-            {/* Info */}
-            <div className="lg:col-span-5 space-y-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
+            <div className="lg:col-span-5 space-y-6">
               <div>
-                <span className="text-xs font-bold text-[#36454f] uppercase tracking-wider bg-slate-100 px-3 py-1 rounded-full border border-[#d3d3d3]">
-                  Ubicación & Contacto
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-[#000000] mt-3">
-                  Visítanos en Santa Fe
+                <h2 className="text-2xl sm:text-4xl font-black text-[#000000] tracking-tight">
+                  Consultorios en Santa Fe
                 </h2>
-                <p className="text-xs sm:text-sm text-[#808080] mt-1">
-                  Instalaciones confortables y equipadas para el cuidado de tu salud y el de tu familia.
+                <p className="text-xs sm:text-sm text-[#808080] mt-2 leading-relaxed">
+                  Infraestructura médica confortable y equipada para el cuidado integral de tu salud.
                 </p>
               </div>
 
-              <div className="space-y-3 text-sm">
+              <div className="space-y-3.5 text-xs">
                 {[
                   {
-                    icon: <MapPin className="w-5 h-5 text-[#36454f] shrink-0 mt-0.5" />,
-                    title: 'Dirección',
+                    icon: <MapPin className="w-4 h-4 text-[#36454f] shrink-0 mt-0.5" />,
+                    title: 'DIRECCIÓN',
                     body: (
                       <>
-                        <p className="text-[#36454f] text-xs mt-0.5">{clinic.address}, {clinic.city}</p>
+                        <p className="text-[#000000] font-semibold text-xs mt-1">{clinic.address}, {clinic.city}</p>
                         <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#000000] mt-1 hover:underline">
-                          Ver en Google Maps <ExternalLink className="w-3 h-3" />
+                          className="inline-flex items-center gap-1 text-[11px] font-medium text-[#36454f] hover:text-[#000000] mt-1.5 underline decoration-[#d3d3d3]">
+                          <span>Abrir en Google Maps</span> <ExternalLink className="w-3 h-3" />
                         </a>
                       </>
                     )
                   },
                   {
-                    icon: <Phone className="w-5 h-5 text-[#36454f] shrink-0 mt-0.5" />,
-                    title: 'Teléfonos',
+                    icon: <Phone className="w-4 h-4 text-[#36454f] shrink-0 mt-0.5" />,
+                    title: 'LÍNEAS DIRECTAS',
                     body: (
-                      <>
-                        <p className="text-xs text-[#36454f] mt-0.5">Fijo: <a href={`tel:${clinic.phone}`} className="font-bold hover:underline">(0342) {clinic.phone}</a></p>
-                        <p className="text-xs text-[#36454f] mt-0.5">WhatsApp: <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="font-bold text-[#000000] hover:underline">342 5162484</a></p>
-                      </>
+                      <div className="mt-1 space-y-0.5 font-mono">
+                        <p className="text-[#000000]">Fijo: <a href={`tel:${clinic.phone}`} className="font-bold hover:underline">(0342) {clinic.phone}</a></p>
+                        <p className="text-[#000000]">WhatsApp: <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="font-bold hover:underline">342 5162484</a></p>
+                      </div>
                     )
                   },
                   {
-                    icon: <Clock className="w-5 h-5 text-[#36454f] shrink-0 mt-0.5" />,
-                    title: 'Horarios',
-                    body: <p className="text-[#36454f] text-xs mt-0.5">{clinic.workingHours}</p>
+                    icon: <Clock className="w-4 h-4 text-[#36454f] shrink-0 mt-0.5" />,
+                    title: 'HORARIOS DE ATENCIÓN',
+                    body: <p className="text-[#000000] font-semibold text-xs mt-1">{clinic.workingHours}</p>
                   },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[#d3d3d3] shadow-2xs">
+                  <div key={i} className="flex items-start gap-4 p-5 rounded-lg bg-white border border-[#d3d3d3]">
                     {item.icon}
                     <div>
-                      <h4 className="font-bold text-[#000000] text-xs uppercase tracking-wide">{item.title}</h4>
+                      <h4 className="font-mono text-[10px] tracking-widest text-[#808080] uppercase">{item.title}</h4>
                       {item.body}
                     </div>
                   </div>
@@ -575,8 +558,8 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Mapa */}
-            <div className="lg:col-span-7 h-80 sm:h-[26rem] rounded-2xl overflow-hidden border border-[#d3d3d3] shadow-sm bg-slate-100">
+            {/* Mapa con marco de precisión */}
+            <div className="lg:col-span-7 h-80 sm:h-[28rem] rounded-xl overflow-hidden border border-[#d3d3d3] bg-white">
               <iframe
                 src={googleMapsEmbedUrl}
                 width="100%"
@@ -592,38 +575,38 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── 8. FOOTER INSTITUCIONAL (Paleta: #000000 fondo, texto #808080 y #d3d3d3) ── */}
-      <footer className="bg-[#000000] text-[#808080] py-12 border-t border-[#36454f] text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+      {/* ── 8. FOOTER SUISSE EDITORIAL (#000000, hairline #36454f) ── */}
+      <footer className="bg-[#000000] text-[#808080] py-14 border-t border-[#36454f] text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-10">
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-[#36454f]">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pb-10 border-b border-[#36454f]/80">
 
             {/* Logo footer fiel a la placa original */}
             <div className="flex flex-col items-center md:items-start">
               <div className="font-logo-nuevo text-3xl sm:text-4xl text-white leading-none">
                 Nuevo Plaza
               </div>
-              <div className="h-[1.5px] w-full max-w-[240px] bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1.5"></div>
-              <span className="font-logo-sub text-[10px] sm:text-[11px] tracking-[0.28em] font-semibold text-[#d3d3d3] uppercase text-center md:text-left pl-[0.28em]">
+              <div className="h-[1px] w-full max-w-[240px] bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1.5"></div>
+              <span className="font-logo-sub text-[9.5px] sm:text-[10.5px] tracking-[0.3em] font-semibold text-[#d3d3d3] uppercase text-center md:text-left pl-[0.3em]">
                 CONSULTORIOS
               </span>
-              <div className="h-[1.5px] w-full max-w-[240px] bg-gradient-to-r from-transparent via-[#808080] to-transparent mt-0.5"></div>
-              <p className="text-[#808080] text-[11px] mt-2.5">Centro Médico Multidisciplinario • Belgrano 3108, Santa Fe</p>
+              <div className="h-[1px] w-full max-w-[240px] bg-gradient-to-r from-transparent via-[#808080] to-transparent mt-0.5"></div>
+              <p className="text-[#808080] text-[11px] font-mono mt-3">Centro Médico Multidisciplinario · Belgrano 3108, Santa Fe</p>
             </div>
 
-            {/* Links */}
-            <div className="flex flex-wrap justify-center gap-5 font-semibold text-[#d3d3d3]">
-              <a href="#profesionales" className="hover:text-white transition">Cuerpo Médico</a>
-              <a href="#laboratorio"   className="hover:text-white transition">Laboratorio</a>
-              <a href="#coberturas"    className="hover:text-white transition">Coberturas</a>
-              <a href="#ubicacion"     className="hover:text-white transition">Ubicación</a>
+            {/* Enlaces de navegación rápida */}
+            <div className="flex flex-wrap justify-center gap-6 font-medium text-[#d3d3d3] text-xs tracking-wide">
+              <a href="#profesionales" className="hover:text-white transition-colors">Cuerpo Médico</a>
+              <a href="#laboratorio"   className="hover:text-white transition-colors">Laboratorio</a>
+              <a href="#coberturas"    className="hover:text-white transition-colors">Coberturas</a>
+              <a href="#ubicacion"     className="hover:text-white transition-colors">Ubicación</a>
             </div>
 
           </div>
 
-          <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] text-[#808080]">
-            <p>© {new Date().getFullYear()} Nuevo Plaza Consultorios. Todos los derechos reservados.</p>
-            <p>Tel: (0342) 4528700 · WhatsApp: 342 5162484</p>
+          <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] font-mono text-[#808080]">
+            <p>© {new Date().getFullYear()} NUEVO PLAZA CONSULTORIOS. TODOS LOS DERECHOS RESERVADOS.</p>
+            <p>TEL: (0342) 4528700 · WHATSAPP: 342 5162484</p>
           </div>
         </div>
       </footer>
