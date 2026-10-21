@@ -14,7 +14,8 @@ import {
   Users,
   ExternalLink,
   ShieldCheck,
-  Check
+  Check,
+  ChevronDown
 } from 'lucide-react';
 
 interface Professional {
@@ -69,6 +70,11 @@ export default function LandingPage() {
   });
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+  const toggleRow = (idx: number) => {
+    setExpandedIndex(prev => prev === idx ? null : idx);
+  };
 
   useEffect(() => {
     fetch('/api/public/clinic')
@@ -294,7 +300,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Grid de tarjetas estilo Clínica Boutique Suiza (Hairline borders, tipografía rotunda, inversión) */}
+        {/* Listado en filas (Directorio Médico Elegante & Accesible) */}
         {filteredProfessionals.length === 0 ? (
           <div className="bg-slate-50 rounded-xl p-14 text-center border border-[#d3d3d3] max-w-md mx-auto">
             <Search className="w-8 h-8 text-[#808080] mx-auto mb-3" />
@@ -308,37 +314,81 @@ export default function LandingPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredProfessionals.map((prof, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl border border-[#d3d3d3] p-6 transition-all duration-200 hover:border-[#000000] hover:shadow-xs flex flex-col justify-between group"
-              >
-                <div>
-                  {/* Micro-etiqueta de especialidad */}
-                  <div className="text-[10px] font-mono tracking-[0.2em] font-bold uppercase text-[#808080] mb-2.5">
-                    {prof.specialty}
-                  </div>
-                  <h3 className="text-lg font-bold text-[#000000] group-hover:text-[#36454f] transition-colors leading-snug">
-                    {prof.name}
-                  </h3>
-                </div>
+          <div className="border-t-2 border-[#000000]">
+            {/* Cabecera de la tabla */}
+            <div className="hidden sm:grid sm:grid-cols-12 py-3 px-4 text-[10.5px] font-mono tracking-widest text-[#808080] uppercase border-b border-[#d3d3d3]">
+              <span className="col-span-7">PROFESIONAL</span>
+              <span className="col-span-4">ESPECIALIDAD</span>
+              <span className="col-span-1 text-right">TURNO</span>
+            </div>
 
-                <div className="mt-6 pt-5 border-t border-[#d3d3d3]/70 flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-[#808080]">CONSULTA CON TURNO</span>
-                  {/* Botón con efecto de inversión suiza */}
-                  <a
-                    href={getWaLinkForDoctor(prof.name, prof.specialty)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg border border-[#36454f] text-[#36454f] bg-transparent hover:bg-[#000000] hover:text-white hover:border-[#000000] transition-all duration-200"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    <span>Pedir Turno</span>
-                  </a>
-                </div>
-              </div>
-            ))}
+            {/* Filas de profesionales */}
+            <div className="divide-y divide-[#d3d3d3]">
+              {filteredProfessionals.map((prof, idx) => {
+                const isExpanded = expandedIndex === idx;
+                return (
+                  <div key={idx} className="transition-colors">
+                    {/* Fila tocable */}
+                    <button
+                      type="button"
+                      onClick={() => toggleRow(idx)}
+                      className={`w-full text-left py-4 sm:py-5 px-3 sm:px-4 flex items-center justify-between gap-4 transition-colors cursor-pointer ${
+                        isExpanded ? 'bg-slate-50' : 'hover:bg-slate-50/70'
+                      }`}
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-11 gap-1 sm:gap-4 items-center flex-1">
+                        <div className="sm:col-span-7">
+                          <h3 className="text-base sm:text-lg font-bold text-[#000000] leading-snug">
+                            {prof.name}
+                          </h3>
+                        </div>
+                        <div className="sm:col-span-4">
+                          <span className="text-xs sm:text-sm font-semibold text-[#36454f]">
+                            {prof.specialty}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="hidden sm:inline text-[11px] font-mono text-[#808080]">
+                          {isExpanded ? 'CERRAR' : 'VER'}
+                        </span>
+                        <ChevronDown 
+                          className={`w-5 h-5 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180 text-[#000000]' : 'text-[#808080]'
+                          }`} 
+                        />
+                      </div>
+                    </button>
+
+                    {/* Desplegable al tocar: Muestra el botón de WhatsApp "Pedir Turno" */}
+                    {isExpanded && (
+                      <div className="bg-slate-50 border-t border-[#d3d3d3]/70 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                          <p className="text-xs sm:text-sm text-[#36454f] font-medium">
+                            Atención en consultorio con turno previo para <strong>{prof.name}</strong> ({prof.specialty}).
+                          </p>
+                          <p className="text-[11px] font-mono text-[#808080] mt-0.5">
+                            Belgrano 3108, Santa Fe · Nuevo Plaza Consultorios
+                          </p>
+                        </div>
+
+                        <a
+                          href={getWaLinkForDoctor(prof.name, prof.specialty)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-lg bg-[#000000] hover:bg-[#36454f] text-white font-bold text-xs sm:text-sm tracking-wide transition-all shadow-sm shrink-0"
+                        >
+                          <MessageCircle className="w-4 h-4 text-[#d3d3d3]" />
+                          <span>Pedir Turno</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-[#d3d3d3]" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 
