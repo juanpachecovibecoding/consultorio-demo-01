@@ -56,16 +56,6 @@ const PROFESSIONALS: Professional[] = [
   { name: 'Equipo Bioquímico',             specialty: 'Laboratorio de Análisis Clínicos',category: 'laboratorio'   },
 ];
 
-const CATEGORIES = [
-  { id: 'all',           label: 'Todos',            icon: Stethoscope },
-  { id: 'clinica',       label: 'Clínica & Interna', icon: HeartPulse  },
-  { id: 'mental',        label: 'Salud Mental',      icon: Brain       },
-  { id: 'mujer-piel',    label: 'Mujer & Piel',      icon: Activity    },
-  { id: 'nutricion',     label: 'Nutrición',          icon: Activity    },
-  { id: 'especialidades',label: 'Especialidades',    icon: ShieldCheck },
-  { id: 'laboratorio',   label: 'Laboratorio',       icon: FlaskConical},
-];
-
 export default function LandingPage() {
   const [clinic, setClinic] = useState<any>({
     clinicName: 'Nuevo Plaza Consultorios',
@@ -79,7 +69,6 @@ export default function LandingPage() {
   });
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     fetch('/api/public/clinic')
@@ -111,14 +100,12 @@ export default function LandingPage() {
 
   const filteredProfessionals = useMemo(() => {
     return PROFESSIONALS.filter(p => {
-      const matchesCategory = selectedCategory === 'all' || p.category === selectedCategory;
       const q = searchTerm.toLowerCase().trim();
-      const matchesSearch = !q ||
+      return !q ||
         p.name.toLowerCase().includes(q) ||
         p.specialty.toLowerCase().includes(q);
-      return matchesCategory && matchesSearch;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm]);
 
   const fullAddressQuery   = encodeURIComponent(`${clinic.address || 'Belgrano 3108'}, ${clinic.city || 'Santa Fe de la Vera Cruz, Santa Fe'}`);
   const googleMapsUrl      = `https://www.google.com/maps/search/?api=1&query=${fullAddressQuery}`;
@@ -307,32 +294,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Filtros de categoría — Botones rectangulares suizos */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-          {CATEGORIES.map(cat => {
-            const isActive = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide shrink-0 transition-all border ${
-                  isActive
-                    ? 'bg-[#000000] text-white border-[#000000]'
-                    : 'bg-white text-[#36454f] border-[#d3d3d3] hover:border-[#000000] hover:text-[#000000]'
-                }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Contador tipo ficha */}
-        <div className="flex items-center justify-between text-xs font-mono text-[#808080] mb-6">
-          <span>{filteredProfessionals.length} PROFESIONALES REGISTRADOS</span>
-          {searchTerm && <span>FILTRANDO: "{searchTerm.toUpperCase()}"</span>}
-        </div>
-
         {/* Grid de tarjetas estilo Clínica Boutique Suiza (Hairline borders, tipografía rotunda, inversión) */}
         {filteredProfessionals.length === 0 ? (
           <div className="bg-slate-50 rounded-xl p-14 text-center border border-[#d3d3d3] max-w-md mx-auto">
@@ -340,7 +301,7 @@ export default function LandingPage() {
             <h3 className="text-base font-bold text-[#000000]">Sin resultados</h3>
             <p className="text-xs text-[#808080] mt-1">Intentá con otra palabra clave o especialidad.</p>
             <button
-              onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}
+              onClick={() => setSearchTerm('')}
               className="mt-5 px-5 py-2.5 rounded-lg bg-[#000000] text-white text-xs font-semibold hover:bg-[#36454f] transition-colors"
             >
               Ver todos los profesionales
