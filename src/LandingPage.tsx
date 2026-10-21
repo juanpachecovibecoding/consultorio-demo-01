@@ -83,8 +83,8 @@ export default function LandingPage() {
     clinicName: 'Nuevo Plaza Consultorios',
     phone: '4528700',
     whatsappNumber: '3425162484',
-    address: 'Santa Fe Capital',
-    city: 'Santa Fe, Argentina',
+    address: 'Belgrano 3108',
+    city: 'Santa Fe de la Vera Cruz, Santa Fe',
     workingHours: 'Lunes a Viernes de 08:00 a 20:00 hs',
     insurances: 'Obras Sociales, Prepagas y Consulta Particular',
     heroImageUrl: '',
@@ -132,9 +132,9 @@ export default function LandingPage() {
     });
   }, [searchTerm, selectedCategory]);
 
-  const fullAddressQuery   = encodeURIComponent(`${clinic.address || 'Santa Fe'}, ${clinic.city || 'Santa Fe, Argentina'}`);
+  const fullAddressQuery   = encodeURIComponent(`${clinic.address || 'Belgrano 3108'}, ${clinic.city || 'Santa Fe de la Vera Cruz, Santa Fe'}`);
   const googleMapsUrl      = `https://www.google.com/maps/search/?api=1&query=${fullAddressQuery}`;
-  const googleMapsEmbedUrl = `https://maps.google.com/maps?q=${fullAddressQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const googleMapsEmbedUrl = `https://maps.google.com/maps?q=${fullAddressQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-emerald-600 selection:text-white">
@@ -628,7 +628,7 @@ export default function LandingPage() {
                 <span className="font-logo-plaza italic font-bold text-2xl text-white leading-none">Plaza</span>
               </div>
               <span className="text-[9px] tracking-[0.22em] font-semibold text-slate-500 uppercase mt-1">CONSULTORIOS</span>
-              <p className="text-slate-600 text-[11px] mt-2">Centro Médico Multidisciplinario • Santa Fe, Argentina</p>
+              <p className="text-slate-600 text-[11px] mt-2">Centro Médico Multidisciplinario • Belgrano 3108, Santa Fe</p>
             </div>
 
             {/* Links */}
