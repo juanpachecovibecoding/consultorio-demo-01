@@ -175,23 +175,16 @@ export default function LandingPage() {
       <header className="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/80 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex justify-between items-center">
 
-          {/* Logotipo */}
-          <a href="#" className="flex items-center gap-3 group shrink-0">
-            {/* Ícono cuadrado de anclaje visual */}
-            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center shrink-0 group-hover:bg-emerald-900 transition">
-              <span className="font-logo-nuevo text-white text-xl leading-none mt-0.5">N</span>
+          {/* Logotipo fiel a la placa original */}
+          <a href="#" className="flex flex-col group shrink-0 py-0.5">
+            <div className="font-logo-nuevo text-3xl sm:text-4xl text-slate-900 group-hover:text-emerald-950 transition-colors leading-none tracking-normal">
+              Nuevo Plaza
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-baseline gap-1">
-                <span className="font-logo-nuevo text-2xl sm:text-3xl text-slate-900 leading-none">Nuevo</span>
-                <span className="font-logo-plaza italic font-bold text-xl sm:text-2xl text-slate-900 leading-none">Plaza</span>
-              </div>
-              <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-slate-400 to-transparent my-[3px]"></div>
-              <span className="text-[9px] sm:text-[10px] tracking-[0.22em] font-semibold text-slate-600 uppercase text-center">
-                CONSULTORIOS
-              </span>
-              <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-slate-400 to-transparent mt-[3px]"></div>
-            </div>
+            <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-stone-400 to-transparent my-1"></div>
+            <span className="font-logo-sub text-[10px] sm:text-[11px] tracking-[0.28em] font-semibold text-slate-700 uppercase text-center pl-[0.28em]">
+              CONSULTORIOS
+            </span>
+            <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-stone-400 to-transparent mt-0.5"></div>
           </a>
 
           {/* Navegación Desktop */}
@@ -621,14 +614,17 @@ export default function LandingPage() {
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-slate-800">
 
-            {/* Logo footer */}
+            {/* Logo footer fiel a la placa original */}
             <div className="flex flex-col items-center md:items-start">
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-logo-nuevo text-3xl text-white leading-none">Nuevo</span>
-                <span className="font-logo-plaza italic font-bold text-2xl text-white leading-none">Plaza</span>
+              <div className="font-logo-nuevo text-3xl sm:text-4xl text-white leading-none">
+                Nuevo Plaza
               </div>
-              <span className="text-[9px] tracking-[0.22em] font-semibold text-slate-500 uppercase mt-1">CONSULTORIOS</span>
-              <p className="text-slate-600 text-[11px] mt-2">Centro Médico Multidisciplinario • Belgrano 3108, Santa Fe</p>
+              <div className="h-[1.5px] w-full max-w-[240px] bg-gradient-to-r from-transparent via-slate-600 to-transparent my-1.5"></div>
+              <span className="font-logo-sub text-[10px] sm:text-[11px] tracking-[0.28em] font-semibold text-slate-400 uppercase text-center md:text-left pl-[0.28em]">
+                CONSULTORIOS
+              </span>
+              <div className="h-[1.5px] w-full max-w-[240px] bg-gradient-to-r from-transparent via-slate-600 to-transparent mt-0.5"></div>
+              <p className="text-slate-500 text-[11px] mt-2.5">Centro Médico Multidisciplinario • Belgrano 3108, Santa Fe</p>
             </div>
 
             {/* Links */}

@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .font-logo-nuevo {
-  font-family: 'Alex Brush', cursive;
+  font-family: 'Pinyon Script', cursive;
 }
 
-.font-logo-plaza {
-  font-family: 'Playfair Display', Georgia, serif;
+.font-logo-sub {
+  font-family: 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
