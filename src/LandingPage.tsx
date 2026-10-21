@@ -1,329 +1,667 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   MessageCircle, 
   MapPin, 
   Clock, 
   Phone, 
   ShieldCheck, 
-  Award, 
   Sparkles, 
-  CalendarCheck, 
   CheckCircle2, 
   ArrowRight,
   Stethoscope,
-  Navigation,
-  ExternalLink
+  Search,
+  HeartPulse,
+  Brain,
+  Smile,
+  FlaskConical,
+  Activity,
+  Users,
+  Calendar,
+  ExternalLink,
+  ChevronRight,
+  Filter
 } from 'lucide-react';
+
+interface Professional {
+  name: string;
+  specialty: string;
+  category: 'clinica' | 'mental' | 'mujer-piel' | 'nutricion' | 'laboratorio' | 'especialidades';
+  role?: string;
+  badge?: string;
+}
+
+const PROFESSIONALS: Professional[] = [
+  // Cardiología
+  { name: 'Dra. Daniela Paviolo', specialty: 'Cardiología', category: 'clinica', badge: 'Salud Cardiovascular' },
+  { name: 'Dr. Enrique Ucedo', specialty: 'Cardiología', category: 'clinica', badge: 'Salud Cardiovascular' },
+  
+  // Clínica Médica & Nefrología
+  { name: 'Dra. Ma. Cecilia Cargnello', specialty: 'Clínica Médica', category: 'clinica', badge: 'Atención Integral' },
+  { name: 'Dra. Adriana Carrizo', specialty: 'Clínica Médica - Nefrología', category: 'clinica', badge: 'Salud Renal' },
+  
+  // Coloproctología
+  { name: 'Dra. Indiana Venetucci', specialty: 'Coloproctología', category: 'especialidades', badge: 'Especialista' },
+  
+  // Dermatología, Ginecología, Estética
+  { name: 'Dra. Flavia Risso', specialty: 'Dermatología', category: 'mujer-piel', badge: 'Cuidado de la Piel' },
+  { name: 'Dra. Ma. Cristina Paz', specialty: 'Ginecología', category: 'mujer-piel', badge: 'Salud Femenina' },
+  { name: 'Dra. Estela Alvarez', specialty: 'Medicina Estética', category: 'mujer-piel', badge: 'Estética Médica' },
+  
+  // Neumonología
+  { name: 'Dra. Virginia Larivey', specialty: 'Neumonología', category: 'clinica', badge: 'Salud Respiratoria' },
+  
+  // Nutrición
+  { name: 'Lic. Ma. de los Milagros Edsberg', specialty: 'Nutrición', category: 'nutricion', badge: 'Planes Nutricionales' },
+  { name: 'Lic. Natalia Amsler', specialty: 'Nutrición', category: 'nutricion', badge: 'Planes Nutricionales' },
+  { name: 'Lic. Vanina Carballo', specialty: 'Nutrición', category: 'nutricion', badge: 'Planes Nutricionales' },
+  
+  // Psicología
+  { name: 'Lic. Silvana Basaldella', specialty: 'Psicología', category: 'mental', badge: 'Psicoterapia' },
+  
+  // Psiquiatría
+  { name: 'Dr. Carlos Prono', specialty: 'Psiquiatría', category: 'mental', badge: 'Salud Mental' },
+  { name: 'Dr. Jose Luis Kot', specialty: 'Psiquiatría', category: 'mental', badge: 'Salud Mental' },
+  { name: 'Dr. Mirko Ambrosini', specialty: 'Psiquiatría', category: 'mental', badge: 'Salud Mental' },
+  { name: 'Dra. Melisa Mattioli', specialty: 'Psiquiatría', category: 'mental', badge: 'Salud Mental' },
+  { name: 'Dr. Gustavo Cassano', specialty: 'Psiquiatría', category: 'mental', badge: 'Salud Mental' },
+  
+  // Reumatología
+  { name: 'Dr. Jose Luis Olivieri', specialty: 'Reumatología', category: 'clinica', badge: 'Articulaciones & Inmunología' },
+  
+  // Laboratorio
+  { name: 'Equipo Bioquímico', specialty: 'Laboratorio de Análisis Clínicos', category: 'laboratorio', badge: 'Bioquímica Clínica' },
+];
+
+const CATEGORIES = [
+  { id: 'all', label: 'Todas las Especialidades', icon: Stethoscope },
+  { id: 'clinica', label: 'Clínica & Especialidades', icon: HeartPulse },
+  { id: 'mental', label: 'Salud Mental (Psiquiatría y Psicología)', icon: Brain },
+  { id: 'mujer-piel', label: 'Dermatología, Ginecología & Estética', icon: Sparkles },
+  { id: 'nutricion', label: 'Nutrición', icon: Activity },
+  { id: 'laboratorio', label: 'Laboratorio', icon: FlaskConical },
+];
 
 export default function LandingPage() {
   const [clinic, setClinic] = useState<any>({
-    clinicName: 'Consultorio Odontológico Dr. Juan Pérez',
-    doctorName: 'Dr. Juan Pérez',
-    specialty: 'Odontología Integral & Estética Dental',
-    address: 'Av. Corrientes 1234, Piso 2',
-    city: 'Buenos Aires',
-    workingHours: 'Lunes a Viernes de 09:00 a 19:00 hs',
-    whatsappNumber: '+54 9 11 5566-7788',
-    insurances: 'OSDE, Swiss Medical, Galeno, Particular'
+    clinicName: 'Nuevo Plaza Consultorios',
+    phone: '4528700',
+    whatsappNumber: '3425162484',
+    address: 'Santa Fe Capital',
+    city: 'Santa Fe, Argentina',
+    workingHours: 'Lunes a Viernes de 08:00 a 20:00 hs',
+    insurances: 'Obras Sociales, Prepagas y Consulta Particular'
   });
 
-  const [services, setServices] = useState<any[]>([
-    { id: '1', name: 'Consulta y Diagnóstico', durationMin: 30, description: 'Evaluación odontológica completa con cámara intraoral.' },
-    { id: '2', name: 'Limpieza y Profilaxis', durationMin: 45, description: 'Eliminación de sarro, manchas y pulido coronario con ultrasonido.' },
-    { id: '3', name: 'Blanqueamiento Dental', durationMin: 45, description: 'Tecnología de última generación para una sonrisa radiante.' },
-    { id: '4', name: 'Urgencia / Alivio del Dolor', durationMin: 30, description: 'Atención prioritaria para dolores agudos y traumatismos.' }
-  ]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     fetch('/api/public/clinic')
       .then(res => res.json())
       .then(data => {
-        if (data.clinic) setClinic(data.clinic);
-        if (data.services && data.services.length > 0) setServices(data.services);
+        if (data.clinic) {
+          setClinic((prev: any) => ({
+            ...prev,
+            ...data.clinic,
+            clinicName: data.clinic.clinicName || 'Nuevo Plaza Consultorios',
+            phone: data.clinic.phone || '4528700',
+            whatsappNumber: data.clinic.whatsappNumber || '3425162484',
+          }));
+        }
       })
       .catch(() => {});
   }, []);
 
-  const cleanWaNumber = (clinic.whatsappNumber || '').replace(/\D/g, '');
-  const waUrl = `https://wa.me/${cleanWaNumber}?text=Hola!%20Quería%20consultar%20para%20agendar%20un%20turno.`;
+  const cleanWaNumber = (clinic.whatsappNumber || '3425162484').replace(/\D/g, '');
+  const waBaseUrl = `https://wa.me/549${cleanWaNumber.startsWith('549') ? cleanWaNumber.slice(3) : cleanWaNumber}`;
+  
+  const getWaLinkForDoctor = (profName: string, specialty: string) => {
+    const text = encodeURIComponent(`Hola, me comunico con Nuevo Plaza Consultorios. Quisiera consultar para solicitar un turno con ${profName} (${specialty}).`);
+    return `${waBaseUrl}?text=${text}`;
+  };
 
-  const fullAddressQuery = encodeURIComponent(`${clinic.address || ''}, ${clinic.city || ''}`);
-  const googleMapsEmbedUrl = `https://maps.google.com/maps?q=${fullAddressQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-  const googleMapsExternalUrl = `https://www.google.com/maps/search/?api=1&query=${fullAddressQuery}`;
+  const heroWaUrl = `${waBaseUrl}?text=${encodeURIComponent('Hola, me comunico con Nuevo Plaza Consultorios. Quisiera consultar sobre turnos y especialidades.')}`;
+  const labWaUrl = `${waBaseUrl}?text=${encodeURIComponent('Hola, quisiera consultar por análisis clínicos en el Laboratorio de Nuevo Plaza Consultorios.')}`;
+
+  // Filtrado de profesionales
+  const filteredProfessionals = useMemo(() => {
+    return PROFESSIONALS.filter(p => {
+      const matchesCategory = selectedCategory === 'all' || p.category === selectedCategory;
+      const cleanSearch = searchTerm.toLowerCase().trim();
+      const matchesSearch = cleanSearch === '' || 
+        p.name.toLowerCase().includes(cleanSearch) || 
+        p.specialty.toLowerCase().includes(cleanSearch) ||
+        (p.badge && p.badge.toLowerCase().includes(cleanSearch));
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchTerm, selectedCategory]);
+
+  const fullAddressQuery = encodeURIComponent(`${clinic.address || 'Santa Fe'}, ${clinic.city || 'Santa Fe, Argentina'}`);
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${fullAddressQuery}`;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-teal-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-teal-600 selection:text-white">
       
-      {/* 1. TOP BAR */}
-      <div className="bg-slate-900 text-slate-300 text-xs py-2.5 px-4 sm:px-8 border-b border-slate-800">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-teal-400" /> {clinic.address}, {clinic.city}
+      {/* 1. TOP BAR INSTITUCIONAL */}
+      <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4 sm:px-8 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center sm:justify-start">
+            <span className="flex items-center gap-1.5 text-slate-300">
+              <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> {clinic.address}, {clinic.city}
             </span>
-            <span className="hidden md:flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-teal-400" /> {clinic.workingHours}
+            <span className="hidden md:flex items-center gap-1.5 text-slate-300">
+              <Clock className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> {clinic.workingHours}
             </span>
           </div>
-          <div className="flex items-center gap-4 font-medium text-slate-300">
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <Phone className="w-3.5 h-3.5 text-teal-400" /> {clinic.phone}
-            </span>
+          <div className="flex items-center gap-4 font-medium">
+            <a 
+              href={`tel:${clinic.phone}`} 
+              className="flex items-center gap-1.5 hover:text-white transition"
+              title="Llamar al teléfono fijo"
+            >
+              <Phone className="w-3.5 h-3.5 text-emerald-400" /> 
+              <span>Tel: <strong>{clinic.phone}</strong></span>
+            </a>
+            <span className="text-slate-600">|</span>
+            <a 
+              href={heroWaUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition font-bold"
+            >
+              <MessageCircle className="w-3.5 h-3.5" /> 
+              <span>WhatsApp: <strong>342 5162484</strong></span>
+            </a>
           </div>
         </div>
       </div>
 
-      {/* 2. NAVBAR */}
-      <nav className="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-slate-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {clinic.logoUrl ? (
-              <img 
-                src={clinic.logoUrl} 
-                alt={clinic.clinicName} 
-                className="w-11 h-11 rounded-2xl object-cover shadow-md border border-slate-100 bg-white" 
-              />
-            ) : (
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-teal-500/20">
-                <Stethoscope className="w-6 h-6" />
+      {/* 2. HEADER CON LOGOTIPO FIEL A LA PLACA */}
+      <header className="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/80 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex justify-between items-center">
+          
+          {/* Logo Estilo Placa Institucional */}
+          <a href="#" className="flex items-center gap-3 group">
+            <div className="flex flex-col">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-logo-nuevo text-3xl sm:text-4xl text-slate-900 group-hover:text-emerald-900 transition leading-none">
+                  Nuevo
+                </span>
+                <span className="font-logo-plaza italic font-bold text-2xl sm:text-3xl text-slate-900 group-hover:text-emerald-950 transition leading-none">
+                  Plaza
+                </span>
               </div>
-            )}
-            <div>
-              <h1 className="text-lg font-black tracking-tight text-slate-900">{clinic.clinicName}</h1>
-              <p className="text-xs font-semibold text-teal-700">{clinic.specialty}</p>
+              
+              {/* Barra decorativa degradada */}
+              <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-slate-400 to-transparent my-1"></div>
+              
+              <span className="text-[10px] sm:text-[11px] tracking-[0.25em] font-semibold text-slate-700 uppercase text-center">
+                CONSULTORIOS
+              </span>
+              <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-slate-400 to-transparent mt-0.5"></div>
             </div>
+          </a>
+
+          {/* Navegación Desktop */}
+          <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
+            <a href="#especialidades" className="hover:text-emerald-700 transition">Especialidades</a>
+            <a href="#profesionales" className="hover:text-emerald-700 transition">Cuerpo Médico</a>
+            <a href="#laboratorio" className="hover:text-emerald-700 transition">Laboratorio</a>
+            <a href="#ubicacion" className="hover:text-emerald-700 transition">Ubicación</a>
+          </nav>
+
+          {/* Botón WhatsApp de Cabecera */}
+          <div className="flex items-center gap-3">
+            <a 
+              href={heroWaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-95"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Solicitar Turno</span>
+            </a>
           </div>
 
-          <a 
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] text-sm"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span>Pedir Turno por WhatsApp</span>
-          </a>
         </div>
-      </nav>
+      </header>
 
-      {/* 3. HERO SECTION */}
-      <section className="py-16 md:py-24 px-4 sm:px-8 relative overflow-hidden bg-gradient-to-b from-white to-slate-50">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold tracking-wide">
-              <Sparkles className="w-4 h-4 text-teal-600" />
-              Atención personalizada con Asistente 24/7
+      {/* 3. HERO SECTION - POLICLÍNICA MULTIDISCIPLINARIA */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-slate-100 py-14 sm:py-20 border-b border-slate-200">
+        
+        {/* Adornos sutiles de fondo */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-emerald-100/40 blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-teal-100/30 blur-3xl pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
+          <div className="max-w-3xl">
+            
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-5">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              Centro Médico Multidisciplinario en Santa Fe
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
-              Tu sonrisa en las mejores manos con el <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-600">{clinic.doctorName}</span>
-            </h2>
+            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
+              Atención médica integral con especialistas de confianza en un solo lugar.
+            </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Cuidado odontológico moderno, cercano y sin esperas. Consultá con nuestro asistente por WhatsApp y recibí tu enlace exclusivo para reservar el horario que mejor te convenga.
+            <p className="text-base sm:text-lg text-slate-600 mt-5 leading-relaxed font-normal">
+              En <strong>Nuevo Plaza Consultorios</strong> reunimos un equipo multidisciplinario de más de 18 profesionales de la salud, cubriendo 13 especialidades médicas y servicio de laboratorio de análisis clínicos propio.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-2">
+            {/* Botones de acción */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mt-8">
               <a 
-                href={waUrl} 
-                target="_blank" 
+                href={heroWaUrl}
+                target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl shadow-xl shadow-emerald-600/25 transition-all hover:scale-105 text-base"
+                className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-600/25 transition-all hover:scale-[1.02]"
               >
                 <MessageCircle className="w-5 h-5" />
-                Agendar Turno por WhatsApp
+                <span>Consultar Turno por WhatsApp</span>
                 <ArrowRight className="w-4 h-4" />
+              </a>
+
+              <a 
+                href="#profesionales"
+                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm sm:text-base border border-slate-300 shadow-xs transition"
+              >
+                <Search className="w-4 h-4 text-slate-500" />
+                <span>Buscar Profesional o Especialidad</span>
               </a>
             </div>
 
-            <div className="pt-4 flex items-center justify-center lg:justify-start gap-8 text-xs font-bold text-slate-500 uppercase tracking-wider">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Confirmación Inmediata
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Recordatorio 24h
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="w-full max-w-md bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-2xl shadow-slate-200/50 space-y-6 relative">
-              <div className="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 font-bold">
-                <Award className="w-8 h-8" />
+            {/* Métricas / Badges de Confianza */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 pt-8 border-t border-slate-200/80">
+              <div>
+                <p className="text-2xl sm:text-3xl font-black text-slate-900">13+</p>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">Especialidades Médicas</p>
               </div>
               <div>
-                <h3 className="text-2xl font-black text-slate-900 mb-2">Reserva Simple por WhatsApp</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Evitá llamadas telefónicas y esperas innecesarias. Nuestro asistente de WhatsApp te solicitará tu DNI y te entregará tu acceso exclusivo a la agenda al instante.
+                <p className="text-2xl sm:text-3xl font-black text-slate-900">18+</p>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">Profesionales de la Salud</p>
+              </div>
+              <div>
+                <p className="text-2xl sm:text-3xl font-black text-emerald-700">Propio</p>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">Laboratorio de Análisis</p>
+              </div>
+              <div>
+                <p className="text-2xl sm:text-3xl font-black text-slate-900">Santa Fe</p>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">Atención Centralizada</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. DIRECTORIO INTERACTIVO DE PROFESIONALES & ESPECIALIDADES */}
+      <section id="profesionales" className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-8">
+        
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-3">
+              <Users className="w-3.5 h-3.5" /> Cuerpo Médico & Staff
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Especialistas y Profesionales
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-2xl">
+              Encuentra a tu médico por nombre o busca la especialidad médica que necesitas.
+            </p>
+          </div>
+
+          {/* Buscador Rápido en Vivo */}
+          <div className="w-full md:w-80 relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input 
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar médico o especialidad..."
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
+            />
+            {searchTerm && (
+              <button 
+                onClick={() => setSearchTerm('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 font-bold"
+              >
+                Limpiar
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Filtros por Categorías */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none mb-8">
+          {CATEGORIES.map(cat => {
+            const Icon = cat.icon;
+            const isActive = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shrink-0 transition ${
+                  isActive 
+                    ? 'bg-slate-900 text-white shadow-sm' 
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-slate-400'}`} />
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Contador de resultados */}
+        <div className="flex items-center justify-between text-xs text-slate-500 mb-6 font-medium">
+          <span>Mostrando <strong>{filteredProfessionals.length}</strong> profesional(es)</span>
+          {searchTerm && <span>Filtro activo: "{searchTerm}"</span>}
+        </div>
+
+        {/* Grid de Tarjetas de Profesionales */}
+        {filteredProfessionals.length === 0 ? (
+          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 max-w-lg mx-auto">
+            <Search className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <h3 className="text-lg font-bold text-slate-800">No se encontraron resultados</h3>
+            <p className="text-xs text-slate-500 mt-1">
+              Prueba buscando por otra palabra clave o restablece los filtros.
+            </p>
+            <button
+              onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}
+              className="mt-4 px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold"
+            >
+              Ver todos los profesionales
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredProfessionals.map((prof, idx) => (
+              <div 
+                key={idx}
+                className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-md hover:border-emerald-300 transition flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <span className="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider">
+                      {prof.specialty}
+                    </span>
+                    {prof.badge && (
+                      <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 shrink-0">
+                        {prof.badge}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="text-lg font-black text-slate-900 group-hover:text-emerald-950 transition">
+                    {prof.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+                    <Stethoscope className="w-3.5 h-3.5 text-emerald-600" />
+                    Nuevo Plaza Consultorios
+                  </p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-slate-400">Atención con turno</span>
+                  <a
+                    href={getWaLinkForDoctor(prof.name, prof.specialty)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl transition"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>Pedir Turno</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </section>
+
+      {/* 5. MÓDULO DESTACADO: LABORATORIO DE ANÁLISIS CLÍNICOS */}
+      <section id="laboratorio" className="py-16 bg-slate-900 text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-4 border border-emerald-500/30">
+                <FlaskConical className="w-3.5 h-3.5" />
+                Servicio Bioquímico Integrado
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                Laboratorio de Análisis Clínicos
+              </h2>
+              <p className="text-slate-300 text-sm sm:text-base mt-4 leading-relaxed">
+                Contamos con servicio bioquímico propio dentro de las instalaciones para mayor comodidad de nuestros pacientes. Realizamos extracciones y estudios de rutina y especializados con resultados ágiles y confiables.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Análisis de Rutina & Chequeos</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Hemogramas, glucemia, lipidograma, orina completa y perfiles hormonales.</p>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Atención a Obras Sociales</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Aceptamos principales obras sociales, prepagas y consultas particulares.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-4 items-center">
+                <a 
+                  href={labWaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/20"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Consultar por Análisis Clínicos</span>
+                </a>
+                <span className="text-xs text-slate-400">
+                  Extracciones por orden médica y turnos programados.
+                </span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-emerald-400" /> Horarios de Laboratorio
+              </h3>
+              <ul className="space-y-3 text-xs text-slate-300">
+                <li className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-slate-400">Extracciones de sangre:</span>
+                  <span className="font-bold text-white">Lunes a Viernes 07:30 a 10:30 hs</span>
+                </li>
+                <li className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-slate-400">Entrega de resultados:</span>
+                  <span className="font-bold text-white">Digital / Presencial</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="text-slate-400">Consultas bioquímicas:</span>
+                  <span className="font-bold text-emerald-300">Vía WhatsApp</span>
+                </li>
+              </ul>
+              <div className="mt-6 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-xs">
+                💡 <strong>Importante:</strong> Consulta previamente los requisitos de ayuno o preparación previa según el estudio solicitado por tu médico.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 6. CÓMO SOLICITAR TURNO */}
+      <section className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">
+            Atención Rápida
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
+            ¿Cómo agendar tu consulta en Nuevo Plaza?
+          </h2>
+          <p className="text-sm text-slate-600 mt-2">
+            Tres simples pasos para coordinar tu consulta médica sin pérdidas de tiempo.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs relative">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-black flex items-center justify-center text-sm mb-4">
+              1
+            </div>
+            <h3 className="text-base font-bold text-slate-900">Elegí la Especialidad</h3>
+            <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+              Busca en nuestro directorio el profesional o especialidad que necesitas para tu atención médica.
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs relative">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center text-sm mb-4">
+              2
+            </div>
+            <h3 className="text-base font-bold text-slate-900">Comunicate por WhatsApp</h3>
+            <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+              Escríbenos directamente o llámanos al (0342) 4528700 para consultar días, horarios disponibles y cobertura.
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs relative">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-black flex items-center justify-center text-sm mb-4">
+              3
+            </div>
+            <h3 className="text-base font-bold text-slate-900">Confirmación & Recordatorio</h3>
+            <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+              Tu turno queda registrado y te enviamos un recordatorio previo a la consulta para tu tranquilidad.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. UBICACIÓN, MAPA & CONTACTO */}
+      <section id="ubicacion" className="py-16 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Info de Contacto */}
+            <div className="lg:col-span-5 space-y-6">
+              <div>
+                <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full">
+                  Ubicación & Contacto
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
+                  Visítanos en Santa Fe
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  Atención integral y consultorios confortables equipados para el cuidado de tu salud.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
-                <div className="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">1</div>
-                  <span>Envías un mensaje por WhatsApp</span>
+              <div className="space-y-4 text-sm">
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                  <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Dirección</h4>
+                    <p className="text-slate-700 text-xs mt-0.5">{clinic.address}, {clinic.city}</p>
+                    <a 
+                      href={googleMapsUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 mt-1 hover:underline"
+                    >
+                      <span>Ver en Google Maps</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">2</div>
-                  <span>El sistema verifica tu DNI y te da un link para agendarte el horario mas conveniente</span>
+
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                  <Phone className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Teléfonos Directos</h4>
+                    <p className="text-xs text-slate-700 mt-0.5">
+                      Fijo: <a href={`tel:${clinic.phone}`} className="font-bold hover:underline">{clinic.phone}</a>
+                    </p>
+                    <p className="text-xs text-slate-700 mt-0.5">
+                      WhatsApp: <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="font-bold text-emerald-700 hover:underline">342 5162484</a>
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">3</div>
-                  <span>Eliges tu turno y queda confirmado</span>
+
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                  <Clock className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Horarios de Atención</h4>
+                    <p className="text-slate-700 text-xs mt-0.5">{clinic.workingHours}</p>
+                  </div>
                 </div>
               </div>
-
-              <a 
-                href={waUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block text-center w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition"
-              >
-                Comenzar Consulta
-              </a>
             </div>
+
+            {/* Mapa Embed de Google Maps */}
+            <div className="lg:col-span-7 h-80 sm:h-96 rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative bg-slate-100">
+              <iframe 
+                src="https://maps.google.com/maps?q=Santa%20Fe%2C%20Argentina&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen={false} 
+                loading="lazy" 
+                title="Ubicación Nuevo Plaza Consultorios"
+              />
+            </div>
+
           </div>
-
         </div>
       </section>
 
-      {/* 4. TRATAMIENTOS / SERVICIOS */}
-      <section className="py-20 px-4 sm:px-8 max-w-6xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <h3 className="text-3xl font-black text-slate-900 tracking-tight">Tratamientos y Servicios</h3>
-          <p className="text-sm text-slate-500 mt-2">Tecnología de avanzada y atención profesional enfocada en tu bienestar</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((s, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-lg shadow-slate-100/50 hover:border-teal-300 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold mb-4">
-                <Sparkles className="w-5 h-5" />
+      {/* 8. FOOTER INSTITUCIONAL */}
+      <footer className="bg-slate-950 text-slate-400 py-12 border-t border-slate-900 text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-slate-800">
+            
+            <div className="flex flex-col items-center md:items-start">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-logo-nuevo text-3xl text-white leading-none">
+                  Nuevo
+                </span>
+                <span className="font-logo-plaza italic font-bold text-2xl text-white leading-none">
+                  Plaza
+                </span>
               </div>
-              <h4 className="font-bold text-slate-900 text-lg mb-1">{s.name}</h4>
-              <p className="text-xs text-teal-700 font-semibold mb-3">Duración aprox: {s.durationMin} min</p>
-              <p className="text-xs text-slate-600 leading-relaxed mb-6">{s.description || 'Atención integral odontológica.'}</p>
-              <a 
-                href={waUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-bold text-emerald-700 flex items-center gap-1 hover:underline"
-              >
-                Consultar por este servicio <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. OBRAS SOCIALES */}
-      <section className="py-12 bg-white border-y border-slate-100 px-4 sm:px-8">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Obras Sociales y Prepagas Aceptadas</p>
-          <div className="flex flex-wrap justify-center items-center gap-3">
-            {clinic.insurances.split(',').map((ins: string, i: number) => (
-              <span key={i} className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
-                {ins.trim()}
+              <span className="text-[10px] tracking-[0.25em] font-semibold text-slate-400 uppercase mt-1">
+                CONSULTORIOS
               </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. UBICACIÓN Y CONTACTO CON GOOGLE MAPS DINÁMICO */}
-      <section id="ubicacion" className="py-20 px-4 sm:px-8 max-w-6xl mx-auto">
-        <div className="bg-slate-900 text-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-slate-800">
-          
-          <div className="lg:col-span-5 space-y-6">
-            <span className="px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold uppercase tracking-wider">
-              Encontranos
-            </span>
-            <h3 className="text-3xl font-black tracking-tight">Atención en {clinic.city || 'el corazón de la ciudad'}</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              Instalaciones confortables y de fácil acceso, diseñadas para que tu visita sea puntual, cómoda y segura.
-            </p>
-
-            <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-3 text-sm">
-                <MapPin className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-white block">Dirección</span>
-                  <span className="text-slate-300">{clinic.address}, {clinic.city}</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 text-sm">
-                <Clock className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-white block">Horarios de Atención</span>
-                  <span className="text-slate-300">{clinic.workingHours}</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 text-sm">
-                <Phone className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-white block">Teléfono de Contacto</span>
-                  <span className="text-slate-300">{clinic.phone}</span>
-                </div>
-              </div>
+              <p className="text-slate-500 text-[11px] mt-2">
+                Centro Médico Multidisciplinario • Santa Fe, Argentina
+              </p>
             </div>
 
-            <div className="pt-2 flex flex-col sm:flex-row gap-3">
-              <a 
-                href={googleMapsExternalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs transition border border-slate-700"
-              >
-                <Navigation className="w-4 h-4 text-teal-400" />
-                Cómo llegar (Google Maps)
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-              </a>
-
-              <a 
-                href={waUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg shadow-emerald-500/20"
-              >
-                <MessageCircle className="w-4 h-4 fill-current" />
-                WhatsApp
-              </a>
+            <div className="flex flex-wrap justify-center gap-6 font-semibold text-slate-300">
+              <a href="#especialidades" className="hover:text-white transition">Especialidades</a>
+              <a href="#profesionales" className="hover:text-white transition">Profesionales</a>
+              <a href="#laboratorio" className="hover:text-white transition">Laboratorio</a>
+              <a href="#ubicacion" className="hover:text-white transition">Ubicación</a>
+              <a href="/admin" className="text-emerald-400 hover:text-emerald-300 transition">Acceso Profesional</a>
             </div>
+
           </div>
 
-          {/* MAPA DE GOOGLE INTERACTIVO CON UBICACIÓN DINÁMICA */}
-          <div className="lg:col-span-7 h-[360px] sm:h-[420px] rounded-3xl overflow-hidden border border-slate-700 shadow-xl bg-slate-800 relative">
-            <iframe
-              title={`Mapa de ubicación de ${clinic.clinicName}`}
-              width="100%"
-              height="100%"
-              style={{ border: 0, filter: 'contrast(1.05)' }}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              src={googleMapsEmbedUrl}
-            />
+          <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] text-slate-500">
+            <p>© {new Date().getFullYear()} Nuevo Plaza Consultorios. Todos los derechos reservados.</p>
+            <p>Tel: (0342) 4528700 • WhatsApp: 342 5162484</p>
           </div>
-
         </div>
-      </section>
-
-      {/* 7. FOOTER */}
-      <footer className="py-8 text-center text-xs text-slate-400 border-t border-slate-100">
-        <p>© {new Date().getFullYear()} {clinic.clinicName}. Todos los derechos reservados.</p>
       </footer>
-
-      {/* FLOATING WHATSAPP BUTTON */}
-      <a 
-        href={waUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Contactar por WhatsApp"
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-2xl shadow-emerald-500/40 transition-all hover:scale-110"
-      >
-        <MessageCircle className="w-8 h-8 fill-current" />
-      </a>
 
     </div>
   );

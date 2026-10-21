@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+.font-logo-nuevo {
+  font-family: 'Alex Brush', cursive;
+}
+
+.font-logo-plaza {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
