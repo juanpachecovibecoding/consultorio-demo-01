@@ -151,6 +151,85 @@ export default function AdminPanel() {
 
   const [feedback, setFeedback] = useState('');
 
+  // Gestión de Servicios y Especialidades (SuperAdmin y Admin)
+  const [servicesList, setServicesList] = useState<any[]>([]);
+  const [serviceModal, setServiceModal] = useState<{ open: boolean; isEdit: boolean; id?: string }>({ open: false, isEdit: false });
+  const [serviceForm, setServiceForm] = useState({ name: '', durationMin: 30, description: '', active: true });
+  const [serviceSubmitting, setServiceSubmitting] = useState(false);
+
+  const loadServices = async () => {
+    try {
+      const res = await authFetch('/api/admin/services');
+      if (res.ok) {
+        const data = await res.json();
+        setServicesList(data.services || []);
+      }
+    } catch (e) {}
+  };
+
+  const handleOpenNewService = () => {
+    setServiceForm({ name: '', durationMin: 30, description: '', active: true });
+    setServiceModal({ open: true, isEdit: false });
+  };
+
+  const handleOpenEditService = (s: any) => {
+    setServiceForm({
+      name: s.name,
+      durationMin: s.durationMin || 30,
+      description: s.description || '',
+      active: s.active !== false
+    });
+    setServiceModal({ open: true, isEdit: true, id: s.id });
+  };
+
+  const handleSaveService = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!serviceForm.name.trim()) {
+      alert('Por favor ingresa el nombre de la especialidad o servicio.');
+      return;
+    }
+    setServiceSubmitting(true);
+    try {
+      const url = serviceModal.isEdit ? `/api/admin/services/${serviceModal.id}` : '/api/admin/services';
+      const method = serviceModal.isEdit ? 'PATCH' : 'POST';
+      const res = await authFetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(serviceForm)
+      });
+      if (res.ok) {
+        await loadServices();
+        setServiceModal({ open: false, isEdit: false });
+        setFeedback(serviceModal.isEdit ? '¡Especialidad actualizada con éxito!' : '¡Nueva especialidad agregada con éxito!');
+        setTimeout(() => setFeedback(''), 3000);
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Error al guardar servicio.');
+      }
+    } catch (e) {
+      alert('Error de conexión al guardar servicio.');
+    } finally {
+      setServiceSubmitting(false);
+    }
+  };
+
+  const handleDeleteService = async (id: string, name: string) => {
+    if (!confirm(`¿Estás seguro de eliminar o desactivar la especialidad "${name}"?`)) return;
+    try {
+      const res = await authFetch(`/api/admin/services/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        await loadServices();
+        setFeedback('¡Servicio eliminado/desactivado con éxito!');
+        setTimeout(() => setFeedback(''), 3000);
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Error al eliminar servicio.');
+      }
+    } catch (e) {
+      alert('Error de conexión al eliminar servicio.');
+    }
+  };
+
   // Helper centralizado para llamadas autenticadas al backend
   const authFetch = (url: string, options: RequestInit = {}) => {
     const headers: Record<string, string> = {

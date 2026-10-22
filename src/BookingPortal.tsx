@@ -243,6 +243,12 @@ export default function BookingPortal() {
                   {selectedDate} · {selectedTime} hs
                 </span>
               </div>
+              {confirmedAppointment?.service && (
+                <div className="flex justify-between items-center border-b border-[#d3d3d3] pb-2">
+                  <span className="text-[#808080] uppercase tracking-wider text-[10px]">Especialidad:</span>
+                  <span className="font-bold text-[#000000]">{confirmedAppointment.service.name}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center border-b border-[#d3d3d3] pb-2">
                 <span className="text-[#808080] uppercase tracking-wider text-[10px]">Centro Médico:</span>
                 <span className="font-semibold text-[#000000]">{clinicData.clinicName || 'Nuevo Plaza Consultorios'}</span>
@@ -415,7 +421,7 @@ export default function BookingPortal() {
               onChange={e => setServiceId(e.target.value)}
               className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] font-medium outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition cursor-pointer"
             >
-              {tokenData.services?.map((s: any) => (
+              {(tokenData.services && tokenData.services.length > 0 ? tokenData.services : [{ id: 'default', name: 'Medicina General / Consulta Médica', durationMin: 30 }]).map((s: any) => (
                 <option key={s.id} value={s.id}>
                   {s.name} ({s.durationMin} min)
                 </option>

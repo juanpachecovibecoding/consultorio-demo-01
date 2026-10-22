@@ -961,6 +961,93 @@ app.post('/api/admin/clinic-config', async (req, res) => {
 });
 
 // -------------------------------------------------------------
+// Endpoints de Gestión de Servicios / Especialidades
+// -------------------------------------------------------------
+
+// Listar Servicios (SuperAdmin y Admin / Dueño)
+app.get('/api/admin/services', requireAdminAuth, async (req, res) => {
+  try {
+    const services = await prisma.service.findMany({
+      orderBy: { createdAt: 'asc' }
+    });
+    res.json({ services });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Middleware auxiliar de SuperAdmin para Servicios
+const requireSuperAdminForServices = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const pin = req.headers['x-admin-pin'] as string;
+  const config = await prisma.systemConfig.findFirst();
+  const validPin = config?.superAdminPin || 'superadmin123';
+  if ((pin && pin === validPin) || (req as any).user?.role === 'superadmin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Acceso restringido: Solo el SuperAdministrador puede modificar los servicios y especialidades.' });
+};
+
+// Crear Servicio (Solo SuperAdmin)
+app.post('/api/admin/services', requireAdminAuth, requireSuperAdminForServices, async (req, res) => {
+  try {
+    const { name, durationMin, description, priceRef, active } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'El nombre del servicio o especialidad es obligatorio.' });
+    }
+    const service = await prisma.service.create({
+      data: {
+        name: name.trim(),
+        durationMin: Number(durationMin) || 30,
+        description: description ? description.trim() : null,
+        priceRef: priceRef !== undefined && priceRef !== '' ? Number(priceRef) : null,
+        active: active !== false
+      }
+    });
+    res.json({ success: true, service });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Modificar Servicio (Solo SuperAdmin)
+app.patch('/api/admin/services/:id', requireAdminAuth, requireSuperAdminForServices, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, durationMin, description, priceRef, active } = req.body;
+    const data: any = {};
+    if (name !== undefined) data.name = name.trim();
+    if (durationMin !== undefined) data.durationMin = Number(durationMin) || 30;
+    if (description !== undefined) data.description = description ? description.trim() : null;
+    if (priceRef !== undefined) data.priceRef = priceRef !== '' && priceRef !== null ? Number(priceRef) : null;
+    if (active !== undefined) data.active = Boolean(active);
+
+    const updated = await prisma.service.update({
+      where: { id },
+      data
+    });
+    res.json({ success: true, service: updated });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Eliminar Servicio (Solo SuperAdmin)
+app.delete('/api/admin/services/:id', requireAdminAuth, requireSuperAdminForServices, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const apptsCount = await prisma.appointment.count({ where: { serviceId: id } });
+    if (apptsCount > 0) {
+      await prisma.service.update({ where: { id }, data: { active: false } });
+      return res.json({ success: true, deactivated: true, message: 'El servicio tiene turnos asociados, se desactivó para preservar el historial.' });
+    }
+    await prisma.service.delete({ where: { id } });
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// -------------------------------------------------------------
 // 5. Cron Job de Recordatorios (Evaluación cada minuto)
 // -------------------------------------------------------------
 setInterval(() => {
@@ -977,6 +1064,29 @@ app.use(express.static(distPath));
 app.get('*', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
+
+async function seedInitialServices() {
+  try {
+    const count = await prisma.service.count();
+    if (count === 0) {
+      await prisma.service.createMany({
+        data: [
+          { name: 'Medicina General / Clínica Médica', durationMin: 30, description: 'Consulta clínica general y diagnóstico integral', active: true },
+          { name: 'Cardiología', durationMin: 30, description: 'Evaluación cardiológica y electrocardiograma', active: true },
+          { name: 'Ginecología y Obstetricia', durationMin: 30, description: 'Control ginecológico y seguimiento', active: true },
+          { name: 'Traumatología', durationMin: 30, description: 'Evaluación traumatológica y lesiones', active: true },
+          { name: 'Nutrición', durationMin: 30, description: 'Planes nutricionales personalizados', active: true },
+          { name: 'Laboratorio de Análisis Clínicos', durationMin: 15, description: 'Extracciones de sangre y análisis de rutina', active: true },
+          { name: 'Ecografías', durationMin: 30, description: 'Estudios ecográficos generales', active: true },
+          { name: 'Neumonología', durationMin: 30, description: 'Diagnóstico y tratamiento de vías respiratorias', active: true }
+        ]
+      });
+      console.log('[Services] Servicios iniciales de Nuevo Plaza sembrados exitosamente.');
+    }
+  } catch (e) {
+    console.error('[Services Seed Error]:', e);
+  }
+}
 
 async function seedInitialUsers() {
   try {
@@ -1004,6 +1114,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`===================================================`);
   // Sembrar usuarios iniciales si no existen
   seedInitialUsers().catch(console.error);
+  seedInitialServices().catch(console.error);
   // Auto-iniciar conexión de WhatsApp (restaura sesión persistida en Supabase)
   startWhatsApp().catch((err) => console.error('[WhatsApp AutoStart Error]:', err));
 });
