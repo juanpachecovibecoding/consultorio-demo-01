@@ -949,9 +949,10 @@ app.post('/api/admin/clinic-config', async (req, res) => {
     let clinic = await prisma.clinicConfig.findFirst();
     if (!clinic) clinic = await prisma.clinicConfig.create({ data: {} });
 
+    const { id, createdAt, updatedAt, ...updateData } = req.body;
     const updated = await prisma.clinicConfig.update({
       where: { id: clinic.id },
-      data: req.body
+      data: updateData
     });
     res.json({ success: true, clinic: updated });
   } catch (error: any) {

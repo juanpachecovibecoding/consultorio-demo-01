@@ -2211,12 +2211,23 @@ export default function AdminPanel() {
                   </div>
 
                   <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Whatsapp</label>
+                    <input 
+                      type="text"
+                      value={clinic.whatsappNumber || ''}
+                      onChange={e => setClinic({ ...clinic, whatsappNumber: e.target.value })}
+                      placeholder="Ej: +54 9 342 516-2484"
+                      className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Teléfono Fijo / Contacto</label>
                     <input 
                       type="text"
                       value={clinic.phone || ''}
                       onChange={e => setClinic({ ...clinic, phone: e.target.value })}
-                      placeholder="Ej: +54 11 4455-6677"
+                      placeholder="Ej: (0342) 4528700"
                       className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
