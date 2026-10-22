@@ -303,6 +303,7 @@ export default function AdminPanel() {
     if (currentUser) {
       loadAgenda();
       loadWaStatus();
+      loadServices();
       if (currentUser.role === 'superadmin') {
         loadUsersList();
         loadSuperAdminConfig();
@@ -2052,6 +2053,43 @@ export default function AdminPanel() {
                 </div>
               </div>
             </div>
+
+            {/* ESPECIALIDADES Y SERVICIOS EN MODO SOLO LECTURA PARA EL DOCTOR / CLIENTE */}
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div>
+                  <h3 className="text-base font-black text-slate-900">Especialidades y Servicios de la Clínica</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Catálogo de especialidades habilitadas para que los pacientes reserven su turno en la agenda online.
+                  </p>
+                </div>
+                <span className="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-bold rounded-full flex items-center gap-1 shrink-0">
+                  <Lock className="w-3 h-3" /> Solo Lectura
+                </span>
+              </div>
+
+              {servicesList.filter((s: any) => s.active).length === 0 ? (
+                <p className="text-xs text-slate-400 py-3">No hay especialidades configuradas en la clínica.</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {servicesList.filter((s: any) => s.active).map((svc: any) => (
+                    <div key={svc.id} className="p-3.5 rounded-2xl border border-slate-100 bg-slate-50/70 flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-xs text-slate-800 block">{svc.name}</span>
+                        <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1 mt-0.5">
+                          <Clock className="w-3 h-3 text-slate-400" /> {svc.durationMin || 30} minutos
+                        </span>
+                      </div>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p className="text-[11px] text-slate-400 italic pt-2">
+                * Para incorporar nuevas especialidades o modificar duraciones de consulta, contacta a tu proveedor de Mediflow.
+              </p>
+            </div>
+
           </div>
         )}
 
@@ -2207,7 +2245,8 @@ export default function AdminPanel() {
 
             {/* SECCIÓN 2: DATOS DE LA CLÍNICA & MARCA */}
             {superAdminSubTab === 'clinica' && (
-              <form onSubmit={saveClinicDataAsSuperAdmin} className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+              <div className="space-y-6">
+                <form onSubmit={saveClinicDataAsSuperAdmin} className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
                 <div>
                   <div className="flex items-center gap-2 text-indigo-600 text-xs font-black uppercase tracking-wider mb-1">
                     <Sparkles className="w-4 h-4" /> Personalización Exclusiva del Cliente
@@ -2365,6 +2404,79 @@ export default function AdminPanel() {
                   </button>
                 </div>
               </form>
+
+              {/* GESTIÓN DE SERVICIOS / ESPECIALIDADES / CATEGORÍAS (SUPERADMIN) */}
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+                  <div>
+                    <div className="flex items-center gap-2 text-indigo-600 text-xs font-black uppercase tracking-wider mb-1">
+                      <Sparkles className="w-4 h-4" /> Especialidades y Servicios de la Clínica
+                    </div>
+                    <h3 className="text-xl font-black text-slate-900">Categorías para la Agenda Online</h3>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Estas son las especialidades y motivos de consulta que los pacientes podrán seleccionar al reservar su turno en la agenda.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleOpenNewService}
+                    className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2 shrink-0"
+                  >
+                    <Plus className="w-4 h-4" /> Nueva Especialidad / Categoría
+                  </button>
+                </div>
+
+                {servicesList.length === 0 ? (
+                  <div className="text-center py-8 text-slate-400 text-xs font-medium">
+                    No hay especialidades registradas. Haz clic en "Nueva Especialidad / Categoría" para dar de alta la primera.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {servicesList.map((svc: any) => (
+                      <div key={svc.id} className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 transition-all bg-slate-50/50 flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm text-slate-900 truncate">{svc.name}</span>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              svc.active ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'
+                            }`}>
+                              {svc.active ? 'Activo' : 'Inactivo'}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3 text-xs text-slate-500 mt-1 font-mono">
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3.5 h-3.5 text-slate-400" /> {svc.durationMin || 30} min
+                            </span>
+                            {svc.description && (
+                              <span className="truncate text-slate-400 font-sans">· {svc.description}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditService(svc)}
+                            className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-lg transition"
+                            title="Editar Categoría"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteService(svc.id, svc.name)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-white rounded-lg transition"
+                            title="Eliminar Categoría"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              </div>
             )}
 
             {/* SECCIÓN 3: RECORDATORIOS & ANTI-BAN */}
@@ -2819,6 +2931,188 @@ export default function AdminPanel() {
                   className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition"
                 >
                   Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: CREAR / EDITAR SERVICIO O CATEGORÍA (SUPERADMIN) */}
+      {serviceModal.open && (
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-100 animate-fade-in">
+            <h3 className="text-lg font-black text-slate-900 mb-1 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-indigo-600" />
+              {serviceModal.isEdit ? 'Editar Especialidad / Categoría' : 'Nueva Especialidad / Categoría'}
+            </h3>
+            <p className="text-xs text-slate-500 mb-6">
+              Este servicio se mostrará en el menú desplegable de la agenda cuando el paciente reserve turno.
+            </p>
+
+            <form onSubmit={handleSaveService} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Nombre de la Especialidad o Servicio *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  value={serviceForm.name}
+                  onChange={e => setServiceForm({ ...serviceForm, name: e.target.value })}
+                  placeholder="Ej: Medicina General / Clínica Médica"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Duración del Turno (Minutos)
+                </label>
+                <select
+                  value={serviceForm.durationMin}
+                  onChange={e => setServiceForm({ ...serviceForm, durationMin: Number(e.target.value) })}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                >
+                  <option value={15}>15 minutos (ej. extracciones y laboratorio)</option>
+                  <option value={20}>20 minutos</option>
+                  <option value={30}>30 minutos (estándar consulta médica)</option>
+                  <option value={45}>45 minutos</option>
+                  <option value={60}>60 minutos (1 hora - sesión extendida)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Descripción o Notas (Opcional)
+                </label>
+                <input 
+                  type="text"
+                  value={serviceForm.description}
+                  onChange={e => setServiceForm({ ...serviceForm, description: e.target.value })}
+                  placeholder="Ej: Consulta general y evaluación integral"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input 
+                  type="checkbox"
+                  id="serviceActiveCheck"
+                  checked={serviceForm.active}
+                  onChange={e => setServiceForm({ ...serviceForm, active: e.target.checked })}
+                  className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500"
+                />
+                <label htmlFor="serviceActiveCheck" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Activo en la Agenda de Turnos
+                </label>
+              </div>
+
+              <div className="pt-4 flex justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setServiceModal({ open: false, isEdit: false })}
+                  className="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={serviceSubmitting}
+                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-md disabled:opacity-50"
+                >
+                  {serviceSubmitting ? 'Guardando...' : serviceModal.isEdit ? 'Actualizar Especialidad' : 'Crear Especialidad'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: CREAR / EDITAR SERVICIO O CATEGORÍA (SUPERADMIN) */}
+      {serviceModal.open && (
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-100 animate-fade-in">
+            <h3 className="text-lg font-black text-slate-900 mb-1 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-indigo-600" />
+              {serviceModal.isEdit ? 'Editar Especialidad / Categoría' : 'Nueva Especialidad / Categoría'}
+            </h3>
+            <p className="text-xs text-slate-500 mb-6">
+              Este servicio se mostrará en el menú desplegable de la agenda cuando el paciente reserve turno.
+            </p>
+
+            <form onSubmit={handleSaveService} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Nombre de la Especialidad o Servicio *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  value={serviceForm.name}
+                  onChange={e => setServiceForm({ ...serviceForm, name: e.target.value })}
+                  placeholder="Ej: Medicina General / Clínica Médica"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Duración del Turno (Minutos)
+                </label>
+                <select
+                  value={serviceForm.durationMin}
+                  onChange={e => setServiceForm({ ...serviceForm, durationMin: Number(e.target.value) })}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                >
+                  <option value={15}>15 minutos (ej. extracciones y laboratorio)</option>
+                  <option value={20}>20 minutos</option>
+                  <option value={30}>30 minutos (estándar consulta médica)</option>
+                  <option value={45}>45 minutos</option>
+                  <option value={60}>60 minutos (1 hora - sesión extendida)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Descripción o Notas (Opcional)
+                </label>
+                <input 
+                  type="text"
+                  value={serviceForm.description}
+                  onChange={e => setServiceForm({ ...serviceForm, description: e.target.value })}
+                  placeholder="Ej: Consulta general y evaluación integral"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input 
+                  type="checkbox"
+                  id="serviceActiveCheck"
+                  checked={serviceForm.active}
+                  onChange={e => setServiceForm({ ...serviceForm, active: e.target.checked })}
+                  className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500"
+                />
+                <label htmlFor="serviceActiveCheck" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Activo en la Agenda de Turnos
+                </label>
+              </div>
+
+              <div className="pt-4 flex justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setServiceModal({ open: false, isEdit: false })}
+                  className="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={serviceSubmitting}
+                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-md disabled:opacity-50"
+                >
+                  {serviceSubmitting ? 'Guardando...' : serviceModal.isEdit ? 'Actualizar Especialidad' : 'Crear Especialidad'}
                 </button>
               </div>
             </form>
