@@ -84,9 +84,9 @@ export default function LandingPage() {
           setClinic((prev: any) => ({
             ...prev,
             ...data.clinic,
-            clinicName:     data.clinic.clinicName     || 'Nuevo Plaza Consultorios',
-            phone:          data.clinic.phone          || '4528700',
-            whatsappNumber: data.clinic.whatsappNumber || '3425162484',
+            clinicName:     data.clinic.clinicName     || prev.clinicName,
+            phone:          data.clinic.phone          || prev.phone,
+            whatsappNumber: data.clinic.whatsappNumber || prev.whatsappNumber,
           }));
         }
       })
@@ -146,7 +146,7 @@ export default function LandingPage() {
               className="flex items-center gap-1.5 text-white hover:text-[#d3d3d3] transition-colors"
             >
               <MessageCircle className="w-3 h-3 text-[#d3d3d3]" />
-              <span>WhatsApp: <strong className="font-mono">342 5162484</strong></span>
+              <span>WhatsApp: <strong className="font-mono">{clinic.whatsappNumber}</strong></span>
             </a>
           </div>
         </div>
@@ -538,8 +538,8 @@ export default function LandingPage() {
                     title: 'LÍNEAS DIRECTAS',
                     body: (
                       <div className="mt-1 space-y-0.5 font-mono">
-                        <p className="text-[#000000]">Fijo: <a href={`tel:${clinic.phone}`} className="font-bold hover:underline">(0342) {clinic.phone}</a></p>
-                        <p className="text-[#000000]">WhatsApp: <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="font-bold hover:underline">342 5162484</a></p>
+                        <p className="text-[#000000]">Fijo: <a href={`tel:${clinic.phone}`} className="font-bold hover:underline">{clinic.phone}</a></p>
+                        <p className="text-[#000000]">WhatsApp: <a href={heroWaUrl} target="_blank" rel="noopener noreferrer" className="font-bold hover:underline">{clinic.whatsappNumber}</a></p>
                       </div>
                     )
                   },
@@ -608,7 +608,7 @@ export default function LandingPage() {
 
           <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] font-mono text-[#808080]">
             <p>© {new Date().getFullYear()} NUEVO PLAZA CONSULTORIOS. TODOS LOS DERECHOS RESERVADOS.</p>
-            <p>TEL: (0342) 4528700 · WHATSAPP: 342 5162484</p>
+            <p>TEL: {clinic.phone} · WHATSAPP: {clinic.whatsappNumber}</p>
           </div>
         </div>
       </footer>
