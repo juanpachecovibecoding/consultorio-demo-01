@@ -9,7 +9,9 @@ import {
   Phone, 
   ShieldCheck, 
   ArrowRight,
-  Sparkles
+  Sparkles,
+  MapPin,
+  ChevronRight
 } from 'lucide-react';
 
 export default function BookingPortal() {
@@ -128,150 +130,262 @@ export default function BookingPortal() {
     }
   };
 
+  // ── Pantalla de Carga ──
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="text-center space-y-3">
-          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto"></div>
-          <p className="text-sm font-bold text-slate-600">Verificando enlace exclusivo de reserva...</p>
+      <div className="min-h-screen bg-[#fafafa] flex flex-col items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <div className="font-logo-nuevo text-4xl text-[#000000] leading-none mb-1">
+            Nuevo Plaza
+          </div>
+          <div className="h-[1px] w-32 mx-auto bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1"></div>
+          <p className="font-logo-sub text-[10px] tracking-[0.3em] font-semibold text-[#36454f] uppercase text-center mb-6">
+            CONSULTORIOS
+          </p>
+          <div className="w-8 h-8 border-2 border-[#d3d3d3] border-t-[#000000] rounded-full animate-spin mx-auto"></div>
+          <p className="text-xs font-mono text-[#808080] uppercase tracking-wider">
+            Verificando enlace exclusivo de reserva...
+          </p>
         </div>
       </div>
     );
   }
 
-  // Pantalla de Error (Token expirado o usado)
+  // ── Pantalla de Error (Token expirado o inválido) ──
   if (errorMessage) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-white p-8 rounded-[2rem] border border-slate-200 shadow-xl text-center space-y-5">
-          <div className="w-16 h-16 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-            <AlertCircle className="w-9 h-9" />
-          </div>
-          <h2 className="text-2xl font-black text-slate-900">Enlace No Disponible</h2>
-          <p className="text-sm text-slate-600 leading-relaxed">{errorMessage}</p>
-          <div className="pt-2">
-            <a 
-              href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white font-bold rounded-xl text-sm transition hover:bg-slate-800"
-            >
-              Volver a la Página Principal
+      <div className="min-h-screen bg-[#fafafa] flex flex-col">
+        {/* Cabecera */}
+        <header className="bg-white border-b border-[#d3d3d3] py-4 px-4 sm:px-10">
+          <div className="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="/" className="flex flex-col group py-0.5">
+              <div className="font-logo-nuevo text-3xl sm:text-4xl text-[#000000] leading-none">
+                Nuevo Plaza
+              </div>
+              <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1"></div>
+              <span className="font-logo-sub text-[9.5px] sm:text-[10px] tracking-[0.3em] font-semibold text-[#36454f] uppercase text-center pl-[0.3em]">
+                CONSULTORIOS
+              </span>
             </a>
           </div>
-        </div>
+        </header>
+
+        <main className="flex-1 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-lg border border-[#d3d3d3] shadow-sm text-center space-y-5">
+            <div className="w-14 h-14 rounded-full bg-[#f8f9fa] border border-[#d3d3d3] text-[#36454f] flex items-center justify-center mx-auto">
+              <AlertCircle className="w-7 h-7" />
+            </div>
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#808080]">ACCESO CADUCADO</span>
+              <h2 className="text-2xl font-bold text-[#000000] tracking-tight mt-1">Enlace No Disponible</h2>
+            </div>
+            <p className="text-xs text-[#36454f] leading-relaxed font-sans">{errorMessage}</p>
+            <div className="pt-2">
+              <a 
+                href="/"
+                className="inline-flex items-center justify-center gap-2 w-full py-3 bg-[#000000] hover:bg-[#36454f] text-white font-mono text-xs uppercase tracking-wider rounded-md transition shadow-sm"
+              >
+                Volver a la Página Principal
+              </a>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
 
-  // Pantalla de Confirmación Exitosa
+  // ── Pantalla de Confirmación Exitosa ──
   if (confirmedAppointment) {
+    const clinicData = tokenData?.clinic || {};
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-lg bg-white p-8 sm:p-10 rounded-[2.5rem] border border-slate-100 shadow-2xl text-center space-y-6">
-          <div className="w-20 h-20 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-12 h-12" />
+      <div className="min-h-screen bg-[#fafafa] flex flex-col">
+        {/* Cabecera */}
+        <header className="bg-white border-b border-[#d3d3d3] py-4 px-4 sm:px-10">
+          <div className="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="/" className="flex flex-col group py-0.5">
+              <div className="font-logo-nuevo text-3xl sm:text-4xl text-[#000000] leading-none">
+                Nuevo Plaza
+              </div>
+              <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1"></div>
+              <span className="font-logo-sub text-[9.5px] sm:text-[10px] tracking-[0.3em] font-semibold text-[#36454f] uppercase text-center pl-[0.3em]">
+                CONSULTORIOS
+              </span>
+            </a>
+            <span className="text-[11px] font-mono text-[#000000] font-bold bg-[#f0f0f0] border border-[#d3d3d3] px-3 py-1 rounded">
+              COMPROBANTE OFICIAL
+            </span>
           </div>
-          <div>
-            <h2 className="text-3xl font-black text-slate-900">¡Turno Confirmado!</h2>
-            <p className="text-sm text-slate-500 mt-1">Tu reserva ha sido registrada correctamente en el consultorio.</p>
+        </header>
+
+        <main className="flex-1 flex items-center justify-center p-4 py-12">
+          <div className="w-full max-w-lg bg-white p-8 sm:p-10 rounded-lg border border-[#d3d3d3] shadow-sm text-center space-y-6">
+            <div className="w-16 h-16 rounded-full bg-[#f8f9fa] border border-[#d3d3d3] text-[#000000] flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-9 h-9" />
+            </div>
+
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#808080]">REGISTRO CONFIRMADO</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#000000] tracking-tight mt-1">¡Turno Reservado!</h2>
+              <p className="text-xs text-[#808080] mt-1 font-sans">
+                Tu cita ha sido registrada exitosamente en Nuevo Plaza Consultorios.
+              </p>
+            </div>
+
+            {/* Ficha Resumen Monocromática */}
+            <div className="p-5 rounded-md bg-[#fafafa] border border-[#d3d3d3] text-left space-y-3 font-mono text-xs">
+              <div className="flex justify-between items-center border-b border-[#d3d3d3] pb-2">
+                <span className="text-[#808080] uppercase tracking-wider text-[10px]">Paciente:</span>
+                <span className="font-bold text-[#000000]">{name} (DNI: {tokenData?.dni})</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-[#d3d3d3] pb-2">
+                <span className="text-[#808080] uppercase tracking-wider text-[10px]">Fecha y Hora:</span>
+                <span className="font-bold text-[#000000] bg-[#f0f0f0] px-2 py-0.5 rounded border border-[#d3d3d3]">
+                  {selectedDate} · {selectedTime} hs
+                </span>
+              </div>
+              <div className="flex justify-between items-center border-b border-[#d3d3d3] pb-2">
+                <span className="text-[#808080] uppercase tracking-wider text-[10px]">Centro Médico:</span>
+                <span className="font-semibold text-[#000000]">{clinicData.clinicName || 'Nuevo Plaza Consultorios'}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[#808080] uppercase tracking-wider text-[10px]">Ubicación:</span>
+                <span className="text-[#36454f]">{clinicData.address || 'Belgrano 3108, Santa Fe'}</span>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-[#36454f] bg-[#f8f9fa] border border-[#d3d3d3] p-3 rounded-md text-left flex items-start gap-2 font-mono">
+              <MessageCircle className="w-4 h-4 text-[#36454f] shrink-0 mt-0.5" />
+              <span>
+                Te enviamos la confirmación por <strong>WhatsApp</strong> y recibirás un recordatorio automático 24 hs antes de tu consulta.
+              </span>
+            </p>
+
+            <a 
+              href="/"
+              className="block w-full py-3.5 bg-[#000000] hover:bg-[#36454f] text-white font-mono text-xs uppercase tracking-wider font-bold rounded-md transition shadow-sm"
+            >
+              Finalizar y Volver al Inicio
+            </a>
           </div>
-
-          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-3 text-sm">
-            <div className="flex justify-between border-b border-slate-200/60 pb-2">
-              <span className="text-slate-500">Paciente:</span>
-              <span className="font-bold text-slate-900">{name} (DNI: {tokenData.dni})</span>
-            </div>
-            <div className="flex justify-between border-b border-slate-200/60 pb-2">
-              <span className="text-slate-500">Fecha y Hora:</span>
-              <span className="font-bold text-emerald-700">{selectedDate} a las {selectedTime} hs</span>
-            </div>
-            <div className="flex justify-between border-b border-slate-200/60 pb-2">
-              <span className="text-slate-500">Profesional:</span>
-              <span className="font-bold text-slate-900">{tokenData.clinic?.doctorName}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Lugar:</span>
-              <span className="font-bold text-slate-900">{tokenData.clinic?.address}</span>
-            </div>
-          </div>
-
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Te hemos enviado un mensaje de confirmación por WhatsApp. Además, te enviaremos un recordatorio 24 horas antes de tu turno.
-          </p>
-
-          <a 
-            href="/"
-            className="block w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition text-sm shadow-md shadow-emerald-600/20"
-          >
-            Finalizar y Volver al Inicio
-          </a>
-        </div>
+        </main>
       </div>
     );
   }
+
+  // ── Vista Principal: Formulario de Reserva ──
+  const clinicData = tokenData?.clinic || {};
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-8">
-      <div className="max-w-3xl mx-auto space-y-6">
-        
-        {/* Cabecera */}
-        <div className="bg-white p-6 sm:p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            {tokenData.clinic?.logoUrl && (
-              <img 
-                src={tokenData.clinic.logoUrl} 
-                alt={tokenData.clinic.clinicName} 
-                className="w-14 h-14 rounded-2xl object-cover shadow-sm border border-slate-100 shrink-0 bg-white" 
-              />
-            )}
-            <div>
-              <span className="px-3 py-1 rounded-full bg-teal-50 text-teal-800 text-xs font-bold uppercase tracking-wider">
-                Enlace de Reserva Exclusivo
-              </span>
-              <h2 className="text-2xl font-black text-slate-900 mt-1">
-                {tokenData.clinic?.clinicName || 'Reserva de Turno'}
-              </h2>
-              <p className="text-xs text-slate-500">DNI Verificado: <strong className="text-slate-800 font-mono">{tokenData.dni}</strong></p>
-            </div>
+    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans">
+      
+      {/* 1. Barra Superior Negra Estilo Boutique */}
+      <div className="bg-[#000000] text-[#d3d3d3] text-xs py-2 px-4 sm:px-10 border-b border-[#36454f]">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-4 text-[11px] font-mono">
+            <span>{clinicData.address || 'Belgrano 3108, Santa Fe'}</span>
+            <span className="hidden sm:inline text-[#808080]">·</span>
+            <span className="hidden sm:inline text-[#808080]">{clinicData.workingHours || 'Lunes a Viernes de 08:00 a 20:00 hs'}</span>
           </div>
-          <div className="text-xs text-amber-800 bg-amber-50 px-4 py-2 rounded-xl border border-amber-200 font-medium shrink-0">
-            ⏳ Este enlace expira en 30 minutos
+          <div className="flex items-center gap-4 text-[11px] font-mono">
+            {clinicData.whatsappNumber && (
+              <span>WhatsApp: <strong className="text-white">{clinicData.whatsappNumber}</strong></span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Cabecera con Logotipo Original Nuevo Plaza */}
+      <header className="bg-white border-b border-[#d3d3d3] py-4 px-4 sm:px-10 sticky top-0 z-30 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          
+          {/* Logotipo fiel a la placa */}
+          <a href="/" className="flex flex-col group py-0.5">
+            <div className="font-logo-nuevo text-3xl sm:text-4xl text-[#000000] group-hover:text-[#36454f] transition-colors leading-none tracking-normal">
+              Nuevo Plaza
+            </div>
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#808080] to-transparent my-1"></div>
+            <span className="font-logo-sub text-[9.5px] sm:text-[10px] tracking-[0.3em] font-semibold text-[#36454f] uppercase text-center pl-[0.3em]">
+              CONSULTORIOS
+            </span>
+          </a>
+
+          {/* Badge Monocromático de Validación */}
+          <div className="flex items-center gap-2 text-[11px] font-mono text-[#36454f] bg-[#f8f9fa] border border-[#d3d3d3] px-3 py-1.5 rounded-md">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="font-semibold uppercase tracking-wider hidden sm:inline">Portal de Reserva Oficial</span>
+            <span className="font-semibold uppercase tracking-wider sm:hidden">Reserva Oficial</span>
+          </div>
+
+        </div>
+      </header>
+
+      {/* 3. Contenedor de Formulario */}
+      <main className="flex-1 max-w-4xl w-full mx-auto py-8 sm:py-12 px-4 sm:px-6 space-y-6">
+        
+        {/* Banner de Validación de Identidad */}
+        <div className="bg-white border border-[#d3d3d3] rounded-lg p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#808080]">VALIDACIÓN DE PACIENTE</span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#000000] font-bold bg-[#f0f0f0] border border-[#d3d3d3] px-2 py-0.5 rounded">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#36454f]" /> DNI {tokenData.dni}
+              </span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#000000] tracking-tight">
+              Agendá tu Turno en Línea
+            </h1>
+            <p className="text-xs text-[#808080] mt-0.5">
+              {clinicData.clinicName || 'Nuevo Plaza Consultorios'} · Selección inmediata de horario
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-mono text-[#36454f] bg-[#f8f9fa] border border-[#d3d3d3] px-3.5 py-2 rounded-md shrink-0 self-start sm:self-auto">
+            <Clock className="w-3.5 h-3.5 text-[#808080]" />
+            <span>Enlace válido por 30 min</span>
           </div>
         </div>
 
         {/* Formulario */}
-        <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-10 rounded-[2.5rem] border border-slate-100 shadow-xl space-y-8">
+        <form onSubmit={handleSubmit} className="bg-white border border-[#d3d3d3] rounded-lg p-6 sm:p-8 space-y-8 shadow-sm">
           
-          {/* 1. Datos Personales */}
+          {/* Paso 1: Datos Personales */}
           <div>
-            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-teal-600" /> 1. Datos del Paciente
-            </h3>
+            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#d3d3d3]">
+              <span className="font-mono text-xs text-[#000000] font-bold">01.</span>
+              <h3 className="font-mono text-xs font-bold tracking-widest text-[#000000] uppercase">
+                Datos del Paciente
+              </h3>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Nombre y Apellido *</label>
+                <label className="block text-[11px] font-mono font-bold text-[#36454f] uppercase tracking-wider mb-1">
+                  Nombre y Apellido *
+                </label>
                 <input 
                   type="text"
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="Ej: Juan Pérez"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 outline-none"
+                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] placeholder-[#808080] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Obra Social / Prepaga</label>
+                <label className="block text-[11px] font-mono font-bold text-[#36454f] uppercase tracking-wider mb-1">
+                  Obra Social / Prepaga
+                </label>
                 <input 
                   type="text"
                   value={healthInsurance}
                   onChange={e => setHealthInsurance(e.target.value)}
-                  placeholder="Ej: OSDE / Particular"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 outline-none"
+                  placeholder="Ej: Particular / IAPOS / OSDE"
+                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] placeholder-[#808080] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-[11px] font-mono font-bold text-[#36454f] uppercase tracking-wider mb-1">
                   Número de WhatsApp para Recordatorios *
                 </label>
                 <input 
@@ -279,26 +393,30 @@ export default function BookingPortal() {
                   required
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  placeholder="Ej: +54 9 11 1234-5678"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 outline-none font-mono"
+                  placeholder="Ej: +54 9 342 123-4567"
+                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm font-mono text-[#000000] placeholder-[#808080] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
                 />
-                <p className="text-[11px] text-teal-800 bg-teal-50 p-2.5 rounded-lg border border-teal-100 mt-1.5 flex items-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0" />
-                  Aquí te enviaremos la confirmación inmediata y el recordatorio automático 24hs antes del turno.
+                <p className="text-[11px] text-[#36454f] bg-[#f8f9fa] border border-[#d3d3d3] p-3 rounded-md mt-2 flex items-center gap-2 font-mono">
+                  <ShieldCheck className="w-4 h-4 text-[#36454f] shrink-0" />
+                  Te enviaremos la confirmación inmediata y el recordatorio automático 24hs antes por este WhatsApp.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* 2. Servicio */}
+          {/* Paso 2: Servicio / Motivo de Consulta */}
           <div>
-            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-teal-600" /> 2. Motivo o Servicio
-            </h3>
+            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#d3d3d3]">
+              <span className="font-mono text-xs text-[#000000] font-bold">02.</span>
+              <h3 className="font-mono text-xs font-bold tracking-widest text-[#000000] uppercase">
+                Servicio o Especialidad
+              </h3>
+            </div>
+
             <select
               value={serviceId}
               onChange={e => setServiceId(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 outline-none bg-white font-medium"
+              className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] font-medium outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition cursor-pointer"
             >
               {tokenData.services?.map((s: any) => (
                 <option key={s.id} value={s.id}>
@@ -308,30 +426,37 @@ export default function BookingPortal() {
             </select>
           </div>
 
-          {/* 3. Selección de Fecha y Hora */}
+          {/* Paso 3: Día y Horario */}
           <div>
-            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-teal-600" /> 3. Elegí Día y Horario
-            </h3>
+            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#d3d3d3]">
+              <span className="font-mono text-xs text-[#000000] font-bold">03.</span>
+              <h3 className="font-mono text-xs font-bold tracking-widest text-[#000000] uppercase">
+                Selección de Día y Horario
+              </h3>
+            </div>
 
             <div className="mb-4">
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Fecha</label>
+              <label className="block text-[11px] font-mono font-bold text-[#36454f] uppercase tracking-wider mb-1">
+                Fecha del Turno
+              </label>
               <input 
                 type="date"
                 min={new Date().toISOString().split('T')[0]}
                 value={selectedDate}
                 onChange={e => setSelectedDate(e.target.value)}
-                className="w-full sm:w-64 px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 outline-none font-medium"
+                className="w-full sm:w-64 px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm font-mono text-[#000000] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition cursor-pointer"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Horarios Disponibles</label>
+              <label className="block text-[11px] font-mono font-bold text-[#36454f] uppercase tracking-wider mb-2">
+                Horarios Disponibles
+              </label>
               {loadingSlots ? (
-                <p className="text-xs text-slate-400 py-4">Buscando horarios libres...</p>
+                <p className="text-xs font-mono text-[#808080] py-4">Buscando horarios disponibles...</p>
               ) : availableSlots.length === 0 ? (
-                <p className="text-xs text-amber-700 bg-amber-50 p-4 rounded-xl border border-amber-200 font-medium">
-                  No hay horarios disponibles para esta fecha. Por favor seleccioná otro día.
+                <p className="text-xs text-[#36454f] bg-[#f8f9fa] border border-[#d3d3d3] p-4 rounded-md font-mono">
+                  No hay horarios disponibles para la fecha seleccionada. Por favor elegí otro día.
                 </p>
               ) : (
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -340,10 +465,10 @@ export default function BookingPortal() {
                       type="button"
                       key={time}
                       onClick={() => setSelectedTime(time)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-bold transition border ${
+                      className={`py-2.5 px-3 rounded-md text-xs font-mono transition border ${
                         selectedTime === time
-                          ? 'bg-teal-600 text-white border-teal-600 shadow-md'
-                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                          ? 'bg-[#000000] text-white border-[#000000] font-bold shadow-sm'
+                          : 'bg-white text-[#36454f] border-[#d3d3d3] hover:border-[#000000] hover:text-[#000000]'
                       }`}
                     >
                       {time} hs
@@ -354,19 +479,32 @@ export default function BookingPortal() {
             </div>
           </div>
 
-          {/* Botón Confirmar */}
-          <button
-            type="submit"
-            disabled={submitting || !selectedTime}
-            className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl shadow-xl shadow-emerald-600/25 transition-all text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {submitting ? 'Confirmando Reserva...' : 'Confirmar Reserva de Turno'}
-            <ArrowRight className="w-5 h-5" />
-          </button>
+          {/* Botón de Confirmación */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={submitting || !selectedTime}
+              className="w-full py-4 bg-[#000000] hover:bg-[#36454f] text-white font-mono text-xs uppercase tracking-wider font-bold rounded-md transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
+            >
+              {submitting ? 'Confirmando Reserva...' : 'Confirmar Reserva de Turno'}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <p className="text-center text-[11px] font-mono text-[#808080] mt-2">
+              Al confirmar, tu turno quedará agendado inmediatamente en nuestro sistema.
+            </p>
+          </div>
 
         </form>
 
-      </div>
+      </main>
+
+      {/* Pie de página sutil */}
+      <footer className="bg-white border-t border-[#d3d3d3] py-6 px-4 text-center">
+        <p className="text-[11px] font-mono text-[#808080]">
+          © {new Date().getFullYear()} NUEVO PLAZA CONSULTORIOS · SISTEMA DE GESTIÓN DE TURNOS
+        </p>
+      </footer>
+
     </div>
   );
 }
