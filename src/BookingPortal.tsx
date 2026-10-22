@@ -366,8 +366,7 @@ export default function BookingPortal() {
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder="Ej: Juan Pérez"
-                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] placeholder-[#808080] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
+                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
                 />
               </div>
 
@@ -379,8 +378,7 @@ export default function BookingPortal() {
                   type="text"
                   value={healthInsurance}
                   onChange={e => setHealthInsurance(e.target.value)}
-                  placeholder="Ej: Particular / IAPOS / OSDE"
-                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] placeholder-[#808080] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
+                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm text-[#000000] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
                 />
               </div>
 
@@ -393,8 +391,7 @@ export default function BookingPortal() {
                   required
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  placeholder="Ej: +54 9 342 123-4567"
-                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm font-mono text-[#000000] placeholder-[#808080] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
+                  className="w-full px-4 py-2.5 bg-white border border-[#d3d3d3] rounded-md text-sm font-mono text-[#000000] outline-none focus:border-[#000000] focus:ring-1 focus:ring-[#000000] transition"
                 />
                 <p className="text-[11px] text-[#36454f] bg-[#f8f9fa] border border-[#d3d3d3] p-3 rounded-md mt-2 flex items-center gap-2 font-mono">
                   <ShieldCheck className="w-4 h-4 text-[#36454f] shrink-0" />
